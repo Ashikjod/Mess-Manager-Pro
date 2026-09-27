@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06101d">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Mess Manager Pro V12</title>
+<style>
+:root{
+  --bg:#06101d; --card:rgba(15,27,43,.86); --line:rgba(255,255,255,.09);
+  --text:#f4f8ff; --muted:#8fa1b8; --green:#37e6a1; --blue:#54a9ff;
+  --orange:#ffb454; --red:#ff667d; --purple:#a982ff; --cyan:#46dff5;
+  --shadow:0 12px 35px rgba(0,0,0,.25); --radius:20px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{margin:0;min-height:100vh;padding-bottom:calc(95px + env(safe-area-inset-bottom,0px));overflow-x:hidden;
+  background:radial-gradient(circle at 10% 0%,rgba(84,169,255,.10),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(55,230,161,.08),transparent 30%),var(--bg);
+  color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+button,input,select{font:inherit;}
+button{border:0;cursor:pointer;}
+.app{width:min(1100px,100%);margin:auto;padding:16px;}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:23px;flex:none;
+  background:linear-gradient(135deg,#54a9ff,#37e6a1);color:#06101d;}
+.brand h1{margin:0;font-size:18px;}
+.brand small{color:var(--muted);font-size:11px;}
+.hgroup{display:flex;align-items:center;gap:8px;}
+.range-chip{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text);font-size:12px;white-space:nowrap;}
+.live{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--green);}
+.live i{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green);}
+.page{display:none;animation:pageIn .2s ease;}
+.page.active{display:block;}
+.glass{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+.card{padding:17px;margin-bottom:14px;}
+.card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
+.card-title h2,.card-title h3{margin:0;font-size:16px;}
+.muted{color:var(--muted);}
+.small{font-size:12px;}
+input,select{width:100%;border:1px solid var(--line);outline:none;background:rgba(255,255,255,.055);
+  color:var(--text);border-radius:14px;padding:12px 13px;}
+input:focus,select:focus{border-color:rgba(84,169,255,.65);}
+input[type="date"]{color-scheme:dark;}
+input[readonly]{opacity:.7;}
+option{background:#0b1929;color:white;}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px;}
+.form-group{margin-bottom:13px;}
+.btn{min-height:43px;padding:10px 15px;border-radius:13px;color:white;background:rgba(255,255,255,.075);border:1px solid var(--line);}
+.btn:active{transform:scale(.97);}
+.btn.primary{background:linear-gradient(135deg,#328ff0,#4cb7ff);}
+.btn.green{background:linear-gradient(135deg,#1dbb83,#37e6a1);color:#03130d;}
+.btn.orange{background:linear-gradient(135deg,#ed9637,#ffc363);color:#1b1003;}
+.btn.red{background:linear-gradient(135deg,#df4964,#ff7184);}
+.btn.purple{background:linear-gradient(135deg,#8060db,#ac8cff);}
+.btn.full{width:100%;}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.stat{padding:15px;min-height:100px;}
+.stat .label{color:var(--muted);font-size:11px;}
+.stat .value{font-size:20px;font-weight:800;margin-top:7px;word-break:break-word;}
+.green-text{color:var(--green)} .blue-text{color:var(--blue)} .orange-text{color:var(--orange)}
+.red-text{color:var(--red)} .purple-text{color:var(--purple)} .cyan-text{color:var(--cyan)}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.quick{padding:15px;text-align:left;border-radius:17px;background:rgba(255,255,255,.045);border:1px solid var(--line);color:var(--text);}
+.quick b{display:block;margin-bottom:4px;}
+.quick span{color:var(--muted);font-size:11px;}
+.flow{display:grid;gap:8px;}
+.flow-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.035);border-radius:13px;}
+.flow-row.highlight{background:rgba(70,223,245,.08);border:1px solid rgba(70,223,245,.25);}
+.member{display:flex;align-items:center;gap:9px;padding:13px;margin-bottom:9px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:16px;}
+.avatar{width:43px;height:43px;flex:none;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(84,169,255,.25),rgba(55,230,161,.2));color:var(--blue);font-weight:800;}
+.member-info{flex:1;min-width:0;}
+.member-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.member-info small{color:var(--muted);}
+.member-balance{text-align:right;min-width:74px;}
+.member-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;min-width:70px;}
+.meal-types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.meal-btn{padding:13px 4px;text-align:center;line-height:1.5;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;color:var(--text);}
+.meal-btn.active{color:#06101d;background:var(--green);border-color:var(--green);}
+.market-row{padding:14px;margin-bottom:9px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line);}
+.market-top{display:flex;justify-content:space-between;gap:10px;}
+.market-money{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px;}
+.money-box{padding:9px;border-radius:11px;background:rgba(255,255,255,.035);}
+.money-box small{display:block;color:var(--muted);font-size:10px;}
+.money-box b{display:block;margin-top:3px;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:500px;}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:12px;}
+th{color:var(--muted);}
+.badge{display:inline-flex;padding:4px 8px;border-radius:8px;font-size:10px;background:rgba(255,255,255,.07);}
+.badge.green{background:rgba(55,230,161,.15);color:var(--green);}
+.badge.red{background:rgba(255,102,125,.15);color:var(--red);}
+.badge.cyan{background:rgba(70,223,245,.15);color:var(--cyan);}
+.badge.orange{background:rgba(255,180,84,.15);color:var(--orange);}
+.nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:700px;margin:auto;z-index:50;padding:7px;
+  display:grid;grid-template-columns:repeat(5,1fr);background:rgba(8,19,32,.94);border:1px solid var(--line);
+  border-radius:22px;box-shadow:0 15px 45px rgba(0,0,0,.4);backdrop-filter:blur(15px);}
+.nav button{color:var(--muted);background:transparent;padding:8px 3px;border-radius:15px;font-size:10px;}
+.nav button span{display:block;font-size:19px;margin-bottom:2px;}
+.nav button.active{color:var(--text);background:rgba(84,169,255,.13);}
+.modal{position:fixed;inset:0;z-index:100;display:none;background:rgba(0,0,0,.58);padding:15px;align-items:flex-end;}
+.modal.show{display:flex;}
+.modal-box{width:min(650px,100%);max-height:92vh;overflow:auto;margin:auto auto 0;padding:18px;border-radius:25px 25px 18px 18px;background:#0b1929;border:1px solid var(--line);}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px;}
+.modal-head h2{margin:0;font-size:18px;}
+.close{width:35px;height:35px;border-radius:12px;color:white;background:rgba(255,255,255,.07);}
+.empty{text-align:center;padding:30px 10px;color:var(--muted);}
+.toast{position:fixed;left:50%;bottom:calc(85px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(15px);z-index:200;
+  background:#13243a;border:1px solid var(--line);border-radius:13px;padding:11px 15px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.setting{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px 0;border-bottom:1px solid var(--line);}
+.setting:last-child{border-bottom:0;}
+.setting b{display:block;margin-bottom:3px;}
+.setting small{color:var(--muted);}
+.smart-date-wrap{position:relative;}
+.smart-date{display:flex;gap:6px;}
+.dtext{flex:1;}
+.dtbtn{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.075);border:1px solid var(--line);color:var(--text);white-space:nowrap;}
+.dtpick{position:absolute;left:0;top:0;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none;}
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{padding-left:38px;padding-right:38px;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;}
+.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,.09);color:var(--muted);font-size:13px;display:none;place-items:center;padding:0;min-height:auto;}
+.search-clear.show{display:grid;}
+@media(min-width:700px){
+  .stats{grid-template-columns:repeat(4,1fr);}
+  .quick-grid{grid-template-columns:repeat(4,1fr);}
+  .modal{align-items:center;}
+  .modal-box{margin:auto;border-radius:25px;}
+  .market-money{grid-template-columns:repeat(4,1fr);}
+}
+@keyframes pageIn{from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="header">
+  <div class="brand">
+    <div class="logo">🍱</div>
+    <div><h1>Mess Manager Pro</h1><small>Smart Mess Accounting V12 · <span id="todayText"></span></small></div>
+  </div>
+  <div class="hgroup">
+    <button class="range-chip" onclick="openModal('rangeModal')">📅 <span id="rangeChipText">সার্বিক</span></button>
+    <div class="live"><i></i>LIVE</div>
+  </div>
+</header>
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+  <div class="card glass">
+    <div class="card-title"><h2>🏦 সার্বিক সংগ্রহ ও খরচ</h2><span class="badge">সব সময়ের হিসাব</span></div>
+    <div class="stats" style="margin:0">
+      <div class="stat glass"><div class="label">মোট উত্তোলন (Members)</div><div id="ovCollected" class="value green-text">৳0</div></div>
+      <div class="stat glass"><div class="label">মোট বাজার খরচ</div><div id="ovMarket" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">দোকানে দেওয়া হয়েছে</div><div id="ovPaidShop" class="value blue-text">৳0</div></div>
+      <div class="stat glass"><div class="label">মোট Member Charge</div><div id="ovCharges" class="value purple-text">৳0</div></div>
+      <div class="stat glass"><div class="label">মোট Refund দেওয়া</div><div id="ovRefunds" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">হাতে আছে (Cash)</div><div id="ovCash" class="value cyan-text">৳0</div></div>
+    </div>
+    <div class="small muted" style="margin-top:10px">দোকানদারের বাকি: <b id="ovShopDue" class="red-text">৳0</b></div>
+  </div>
+
+  <div class="card glass">
+    <div class="card-title"><h2>💰 Real-time Cash Position</h2><span class="badge cyan">লাইভ</span></div>
+    <div class="flow">
+      <div class="flow-row"><span>মোট উত্তোলন (সব জমা)</span><b id="cashTotalIn" class="green-text">৳0</b></div>
+      <div class="flow-row"><span>দোকানদারকে দেওয়া</span><b id="cashPaidShop" class="red-text">৳0</b></div>
+      <div class="flow-row"><span>মোট Member Charge</span><b id="cashCharges" class="orange-text">৳0</b></div>
+      <div class="flow-row"><span>মোট Member Refund</span><b id="cashRefunds" class="purple-text">৳0</b></div>
+      <div class="flow-row highlight">
+        <span><b>✅ হাতে অবশিষ্ট টাকা</b></span><b id="cashRemaining" class="cyan-text" style="font-size:16px">৳0</b>
+      </div>
+    </div>
+    <div class="small muted" style="margin-top:8px">সূত্র: মোট উত্তোলন − দোকানে দেওয়া − মোট চার্জ − মোট Refund</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat glass"><div class="label">বাজার (<span class="range-badge">সার্বিক</span>)</div><div id="sPurchase" class="value orange-text">৳0</div></div>
+    <div class="stat glass"><div class="label">মোট মিল</div><div id="sMeals" class="value blue-text">0</div></div>
+    <div class="stat glass"><div class="label">Meal Rate</div><div id="sRate" class="value green-text">৳0</div></div>
+    <div class="stat glass"><div class="label">দোকানদারের বাকি</div><div id="sDue" class="value red-text">৳0</div></div>
+  </div>
+
+  <div class="card glass">
+    <div class="card-title"><h2>⚡ Quick Actions</h2></div>
+    <div class="quick-grid">
+      <button class="quick" onclick="openMemberModal()"><b>👤 Member</b><span>নতুন সদস্য</span></button>
+      <button class="quick" onclick="openMealModal()"><b>🍛 Meal</b><span>মিল যোগ কর</span></button>
+      <button class="quick" onclick="openDepositModal()"><b>💵 Deposit</b><span>সদস্যের টাকা</span></button>
+      <button class="quick" onclick="openMarketModal()"><b>🛒 Market</b><span>বাজার যোগ কর</span></button>
+    </div>
+  </div>
+
+  <div class="card glass">
+    <div class="card-title"><h2>📊 Financial Overview</h2><span class="badge range-badge">সার্বিক</span></div>
+    <div class="stats" style="margin:0">
+      <div class="stat glass"><div class="label">Member Deposits</div><div id="fDeposit" class="value green-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Food Cost</div><div id="fFood" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Charges</div><div id="fCharges" class="value purple-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Refunds</div><div id="fRefunds" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Receive</div><div id="fReceive" class="value blue-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Collect</div><div id="fCollect" class="value red-text">৳0</div></div>
+    </div>
+  </div>
+
+  <div class="card glass">
+    <div class="card-title"><h2>💸 Money Flow</h2><span class="badge range-badge">সার্বিক</span></div>
+    <div class="flow">
+      <div class="flow-row"><span>Member থেকে এসেছে</span><b id="flowIn" class="green-text">৳0</b></div>
+      <div class="flow-row"><span>বাজারের মোট মূল্য</span><b id="flowPurchase" class="orange-text">৳0</b></div>
+      <div class="flow-row"><span>দোকানদারকে দেওয়া</span><b id="flowPaid" class="red-text">৳0</b></div>
+      <div class="flow-row"><span>দোকানদারের কাছে বাকি</span><b id="flowDue" class="purple-text">৳0</b></div>
+      <div class="flow-row"><span>Member Charges</span><b id="flowCharges" class="orange-text">৳0</b></div>
+      <div class="flow-row"><span>Member Refunds</span><b id="flowRefunds" class="purple-text">৳0</b></div>
+      <div class="flow-row"><span>Member Cash Balance</span><b id="flowBalance" class="cyan-text">৳0</b></div>
+    </div>
+  </div>
+
+  <div class="card glass">
+    <div class="card-title"><h2>📋 বাকি / পাওনা তালিকা</h2><span class="badge range-badge">সার্বিক</span></div>
+    <div id="dueList"></div>
+  </div>
+
+</section>
+
+<!-- MEMBERS -->
+<section id="members" class="page">
+  <div class="card glass">
+    <div class="card-title"><h2>👥 Members</h2><button class="btn primary" onclick="openMemberModal()">+ Add</button></div>
+    <div class="small muted" style="margin-bottom:10px">Total Members: <span id="memberCount">0</span> · দেখানো হচ্ছে: <span id="memberShownCount">0</span> · <span class="badge range-badge">সার্বিক</span></div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="memberSearch" type="search" placeholder="Member খুঁজো (নাম লিখো)..." oninput="onMemberSearch()">
+      <button class="search-clear" id="memberSearchClear" onclick="clearMemberSearch()">✕</button>
+    </div>
+    <div id="memberList"></div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market" class="page">
+  <div class="stats">
+    <div class="stat glass"><div class="label">বাজার</div><div id="mPurchase" class="value orange-text">৳0</div></div>
+    <div class="stat glass"><div class="label">দেওয়া হয়েছে</div><div id="mPaid" class="value green-text">৳0</div></div>
+    <div class="stat glass"><div class="label">বাকি</div><div id="mDue" class="value red-text">৳0</div></div>
+    <div class="stat glass"><div class="label">Entries</div><div id="mCount" class="value blue-text">0</div></div>
+  </div>
+  <div class="card glass">
+    <div class="card-title"><h2>🛒 Market & Shopkeeper</h2><button class="btn primary" onclick="openMarketModal()">+ Add</button></div>
+    <div class="small muted" style="margin-bottom:10px">সময়কাল: <span class="range-badge">সার্বিক</span></div>
+    <div id="marketList"></div>
+  </div>
+</section>
+
+<!-- REPORT -->
+<section id="report" class="page">
+  <div class="card glass">
+    <div class="card-title"><h2>📑 Financial Report</h2><span class="badge">LIVE</span></div>
+    <div class="small muted" style="margin-bottom:10px">সময়কাল: <b id="reportRangeLabel">সার্বিক</b> · <button class="btn" style="padding:5px 10px;min-height:auto" onclick="openModal('rangeModal')">পরিবর্তন</button></div>
+    <div class="stats" style="margin:0">
+      <div class="stat glass"><div class="label">Total Deposit</div><div id="rDeposit" class="value green-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Market Expense</div><div id="rPurchase" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Shopkeeper Paid</div><div id="rPaid" class="value blue-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Shopkeeper Due</div><div id="rDue" class="value red-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Total Meals</div><div id="rMeals" class="value purple-text">0</div></div>
+      <div class="stat glass"><div class="label">Meal Rate</div><div id="rRate" class="value cyan-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Total Charges</div><div id="rCharges" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Total Refunds</div><div id="rRefunds" class="value orange-text">৳0</div></div>
+      <div class="stat glass"><div class="label">Cash in Hand</div><div id="rCash" class="value cyan-text">৳0</div></div>
+    </div>
+  </div>
+  <div class="card glass">
+    <div class="card-title"><h2>👥 Member Settlement</h2></div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="reportSearch" type="search" placeholder="Member খুঁজো..." oninput="onReportSearch()">
+      <button class="search-clear" id="reportSearchClear" onclick="clearReportSearch()">✕</button>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Member</th><th>Meal</th><th>Food Cost</th><th>Charges</th><th>Paid</th><th>Refunded</th><th>Balance</th><th>Status</th></tr></thead><tbody id="memberReport"></tbody></table></div>
+  </div>
+  <div class="card glass">
+    <div class="card-title"><h2>🛒 Market Report</h2></div>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Purchase</th><th>Paid</th><th>Due</th></tr></thead><tbody id="marketReport"></tbody></table></div>
+  </div>
+  <div class="card glass">
+    <div class="card-title"><h2>💵 Transaction History</h2></div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="depositSearch" type="search" placeholder="Member খুঁজো..." oninput="onDepositSearch()">
+      <button class="search-clear" id="depositSearchClear" onclick="clearDepositSearch()">✕</button>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th></tr></thead><tbody id="depositReport"></tbody></table></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+  <div class="card glass">
+    <div class="card-title"><h2>⚙️ Settings & Backup</h2></div>
+    <div class="setting"><div><b>📅 সময়কাল পরিবর্তন</b><small>All Time / আজ / এই মাস / কাস্টম</small></div><button class="btn primary" onclick="openModal('rangeModal')">Change</button></div>
+    <div class="setting"><div><b>⬇️ Download Backup</b><small>সম্পূর্ণ JSON backup</small></div><button class="btn primary" onclick="downloadBackup()">Download</button></div>
+    <div class="setting"><div><b>♻️ Restore</b><small>Backup থেকে data ফেরত</small></div><button class="btn purple" onclick="restoreBackup()">Restore</button></div>
+    <div class="setting"><div><b>🗑️ Clear All Data</b><small>সব member, meal, deposit, charge, refund ও market data মুছে দেবে</small></div><button class="btn red" onclick="clearAllData()">Clear</button></div>
+  </div>
+  <div class="card glass">
+    <div class="card-title"><h2>ℹ️ হিসাবের নিয়ম</h2></div>
+    <p class="small muted">Breakfast = 0.5 Meal · Lunch = 1 Meal · Dinner = 0.5 Meal</p>
+    <p class="small muted">📝 Custom Meal = সরাসরি যত মিল লিখবেন, ঠিক তত মিল</p>
+    <p class="small muted">Meal Rate = নির্বাচিত সময়কালে মোট বাজার ÷ মোট Meal</p>
+    <p class="small muted">Member Food Cost = Member Meal × Meal Rate</p>
+    <p class="small muted">Member Balance = Deposit − Food Cost − Charges − Refund</p>
+    <p class="small muted">হাতে অবশিষ্ট টাকা = মোট উত্তোলন − দোকানদারকে দেওয়া − মোট Member Charge − মোট Refund</p>
+    <p class="small muted">কোনো member-এর কাছে টাকা পাওনা থাকলে (Balance &gt; 0) তাকে Refund দেওয়া যাবে। Refund দিলে Balance কমবে।</p>
+    <p class="small muted">"সার্বিক সংগ্রহ ও খরচ" এবং "Real-time Cash Position" কার্ড সবসময় শুরু থেকে এখন পর্যন্ত সব হিসাব দেখায়।</p>
+  </div>
+</section>
+
+</div>
+
+<nav class="nav">
+  <button class="active" data-page="home" onclick="showPage('home',this)"><span>🏠</span>Home</button>
+  <button data-page="members" onclick="showPage('members',this)"><span>👥</span>Members</button>
+  <button data-page="market" onclick="showPage('market',this)"><span>🛒</span>Market</button>
+  <button data-page="report" onclick="showPage('report',this)"><span>📊</span>Report</button>
+  <button data-page="settings" onclick="showPage('settings',this)"><span>⚙️</span>Settings</button>
+</nav>
+
+<!-- MEMBER MODAL -->
+<div id="memberModal" class="modal" onclick="modalBackground(event,'memberModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>👤 Add Member</h2><button class="close" onclick="closeModal('memberModal')">✕</button></div>
+    <div class="form-group"><label>Member Name</label><input id="memberName" placeholder="যেমন: Ashik"></div>
+    <button class="btn green full" onclick="addMember()">Save Member</button>
+  </div>
+</div>
+
+<!-- MEAL MODAL -->
+<div id="mealModal" class="modal" onclick="modalBackground(event,'mealModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>🍛 Add Meal</h2><button class="close" onclick="closeModal('mealModal')">✕</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="mealDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('mealDatePick')">📅</button>
+          <button type="button" class="dtbtn" onclick="quickSetToday('mealDate')">আজ</button>
+        </div>
+        <input type="date" id="mealDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Member</label>
+      <div class="search-wrap" style="margin-bottom:7px">
+        <span class="search-icon">🔍</span>
+        <input id="mealMemberSearch" type="search" placeholder="Member খুঁজো..." oninput="filterMemberSelect('mealMemberSearch','mealMember')">
+      </div>
+      <select id="mealMember"></select>
+    </div>
+    <div class="form-group">
+      <label>Meal Type</label>
+      <div class="meal-types" id="mealTypeGroup">
+        <button type="button" class="meal-btn" data-type="Breakfast" onclick="toggleMealType(this)">🌅<br>Breakfast<br>0.5</button>
+        <button type="button" class="meal-btn" data-type="Lunch" onclick="toggleMealType(this)">☀️<br>Lunch<br>1</button>
+        <button type="button" class="meal-btn" data-type="Dinner" onclick="toggleMealType(this)">🌙<br>Dinner<br>0.5</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>📝 সরাসরি মিল সংখ্যা (ঐচ্ছিক)</label>
+      <input id="mealCustom" type="number" min="0" step="0.5" inputmode="decimal" placeholder="যেমন: 10 / 5 / 2.5">
+      <div class="small muted" style="margin-top:5px">খাতার সাথে মিলাতে সরাসরি মিল সংখ্যা লেখো (যেমন একসাথে 10 মিল)</div>
+    </div>
+    <div class="form-group">
+      <label>⚡ Member Charge (ঐচ্ছিক)</label>
+      <input id="mealCharge" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
+    </div>
+    <button class="btn green full" onclick="addMeal()">Save Meal</button>
+  </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div id="depositModal" class="modal" onclick="modalBackground(event,'depositModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>💵 Member Deposit</h2><button class="close" onclick="closeModal('depositModal')">✕</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="depositDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('depositDatePick')">📅</button>
+          <button type="button" class="dtbtn" onclick="quickSetToday('depositDate')">আজ</button>
+        </div>
+        <input type="date" id="depositDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Member</label>
+      <div class="search-wrap" style="margin-bottom:7px">
+        <span class="search-icon">🔍</span>
+        <input id="depositMemberSearch" type="search" placeholder="Member খুঁজো..." oninput="filterMemberSelect('depositMemberSearch','depositMember')">
+      </div>
+      <select id="depositMember"></select>
+    </div>
+    <div class="form-group"><label>Amount (জমা)</label><input id="depositAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="100"></div>
+    <div class="form-group"><label>⚡ Member Charge (ঐচ্ছিক)</label><input id="depositCharge" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0"></div>
+    <button class="btn green full" onclick="addDeposit()">Add Deposit</button>
+  </div>
+</div>
+
+<!-- CHARGE MODAL -->
+<div id="chargeModal" class="modal" onclick="modalBackground(event,'chargeModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>⚡ Member Charge</h2><button class="close" onclick="closeModal('chargeModal')">✕</button></div>
+    <div class="form-group"><label>Member</label><input id="chargeMemberName" readonly></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="chargeDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('chargeDatePick')">📅</button>
+          <button type="button" class="dtbtn" onclick="quickSetToday('chargeDate')">আজ</button>
+        </div>
+        <input type="date" id="chargeDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>Charge Amount</label><input id="chargeAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="50"></div>
+    <div class="form-group"><label>কারণ (ঐচ্ছিক)</label><input id="chargeReason" placeholder="যেমন: অতিরিক্ত খাবার / অন্যান্য"></div>
+    <button class="btn green full" onclick="saveCharge()">Save Charge</button>
+  </div>
+</div>
+
+<!-- REFUND MODAL -->
+<div id="refundModal" class="modal" onclick="modalBackground(event,'refundModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>💸 Member Refund</h2><button class="close" onclick="closeModal('refundModal')">✕</button></div>
+    <div class="form-group"><label>Member</label><input id="refundMemberName" readonly></div>
+
+    <div class="card glass" style="padding:12px;margin-bottom:13px">
+      <div class="flow-row"><span>মোট পাওনা (মেম্বারের)</span><b id="refundTotalDue" class="green-text">৳0</b></div>
+      <div class="flow-row" style="margin-top:7px"><span>আগে ফেরত দেওয়া হয়েছে</span><b id="refundAlreadyGiven" class="orange-text">৳0</b></div>
+      <div class="flow-row" style="margin-top:7px"><span>এখনও বাকি (দিতে হবে)</span><b id="refundRemaining" class="cyan-text">৳0</b></div>
+      <div class="flow-row highlight" style="margin-top:7px">
+        <span><b>এই Refund-এর পরে বাকি থাকবে</b></span><b id="refundAfter" class="purple-text">৳0</b>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="refundDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('refundDatePick')">📅</button>
+          <button type="button" class="dtbtn" onclick="quickSetToday('refundDate')">আজ</button>
+        </div>
+        <input type="date" id="refundDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>ফেরত দেওয়ার Amount</label><input id="refundAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="500"></div>
+    <div class="form-group"><label>নোট (ঐচ্ছিক)</label><input id="refundNote" placeholder="যেমন: বাকি টাকা ফেরত"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <button class="btn" onclick="fillRefundAll()">সব দিন (বাকি যত)</button>
+      <button class="btn" onclick="fillRefundHalf()">অর্ধেক</button>
+    </div>
+    <button class="btn green full" onclick="saveRefund()">Save Refund</button>
+  </div>
+</div>
+
+<!-- MARKET MODAL -->
+<div id="marketModal" class="modal" onclick="modalBackground(event,'marketModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>🛒 Market</h2><button class="close" onclick="closeModal('marketModal')">✕</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="marketDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('marketDatePick')">📅</button>
+          <button type="button" class="dtbtn" onclick="quickSetToday('marketDate')">আজ</button>
+        </div>
+        <input type="date" id="marketDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>মোট বাজার</label><input id="marketPurchase" type="number" min="0" step="0.01" inputmode="decimal" placeholder="2000"></div>
+    <div class="form-group"><label>দোকানদারকে দেওয়া</label><input id="marketPaid" type="number" min="0" step="0.01" inputmode="decimal" placeholder="1500"></div>
+    <div class="card glass" style="padding:12px;margin-bottom:13px">
+      <div class="flow-row"><span>এই entry-এর বাকি</span><b id="marketEntryDue" class="red-text">৳0</b></div>
+      <div class="flow-row" style="margin-top:7px"><span>মোট বাকি (সার্বিক)</span><b id="marketTotalDue" class="orange-text">৳0</b></div>
+    </div>
+    <button class="btn green full" onclick="addMarket()">Save Market</button>
+  </div>
+</div>
+
+<!-- MEMBER DETAIL -->
+<div id="detailModal" class="modal" onclick="modalBackground(event,'detailModal')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div><h2 id="detailName">Member</h2><small id="detailSummary" class="muted"></small></div>
+      <button class="close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div id="detailStats" class="stats"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+      <button class="btn green" onclick="fromDetailDeposit()">+ Deposit</button>
+      <button class="btn purple" onclick="openChargeModal(activeMember)">⚡ Charge</button>
+      <button class="btn orange" style="grid-column:span 2" onclick="fromDetailRefund()">💸 Refund দাও</button>
+    </div>
+    <div class="card glass"><div class="card-title"><h3>🍛 Meal History</h3></div><div id="detailMeals"></div></div>
+    <div class="card glass"><div class="card-title"><h3>⚡ Charge History</h3></div><div id="detailCharges"></div></div>
+    <div class="card glass"><div class="card-title"><h3>💸 Refund History</h3></div><div id="detailRefunds"></div></div>
+    <div class="card glass"><div class="card-title"><h3>💵 Deposit History</h3></div><div id="detailDeposits"></div></div>
+    <button class="btn purple full" style="margin-bottom:8px" onclick="copyMemberStatement()">📋 Statement কপি করো</button>
+  </div>
+</div>
+
+<!-- RANGE MODAL -->
+<div id="rangeModal" class="modal" onclick="modalBackground(event,'rangeModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>📅 সময়কাল নির্বাচন</h2><button class="close" onclick="closeModal('rangeModal')">✕</button></div>
+    <div class="quick-grid" style="margin-bottom:14px">
+      <button class="quick" onclick="setRange('all')"><b>♾️ সার্বিক</b><span>শুরু থেকে এখন পর্যন্ত</span></button>
+      <button class="quick" onclick="setRange('today')"><b>📆 আজ</b><span id="todayLabel"></span></button>
+      <button class="quick" onclick="setRange('month')"><b>🗓️ এই মাস</b><span id="monthLabel"></span></button>
+      <button class="quick" onclick="setRange('custom')"><b>🎯 কাস্টম</b><span>নিজের তারিখ দাও</span></button>
+    </div>
+    <div id="customRangeBox" style="display:none">
+      <div class="form-group">
+        <label>শুরু তারিখ</label>
+        <div class="smart-date-wrap">
+          <div class="smart-date">
+            <input type="text" id="rngFromText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+            <button type="button" class="dtbtn" onclick="showPickerFor('rngFromPick')">📅</button>
+          </div>
+          <input type="date" id="rngFromPick" class="dtpick">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>শেষ তারিখ</label>
+        <div class="smart-date-wrap">
+          <div class="smart-date">
+            <input type="text" id="rngToText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+            <button type="button" class="dtbtn" onclick="showPickerFor('rngToPick')">📅</button>
+          </div>
+          <input type="date" id="rngToPick" class="dtpick">
+        </div>
+      </div>
+      <button class="btn green full" onclick="applyCustomRange()">Apply Range</button>
+    </div>
+    <div class="small muted" style="margin-top:12px">বর্তমান সময়কাল: <b id="rangeModalCurrent"></b></div>
+  </div>
+</div>
+
+<input id="restoreFile" type="file" accept=".json,application/json" hidden>
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+/* ============ DATABASE ============ */
+const DB_KEY="mess_manager_pro_v12";
+let data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+let entryDate=today();
+let range={mode:"all",from:null,to:null};
+let activeMember=null;
+let chargingMemberId=null;
+let refundingMemberId=null;
+let memberSearchTerm="";
+let reportSearchTerm="";
+let depositSearchTerm="";
+
+/* ============ DATE HELPERS ============ */
+function pad(n){return String(n).padStart(2,"0");}
+function localDateString(d=new Date()){return [d.getFullYear(),pad(d.getMonth()+1),pad(d.getDate())].join("-");}
+function today(){return localDateString(new Date());}
+function formatDate(iso){ if(!iso) return "-"; const p=iso.split("-"); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:iso; }
+function isoToDMY(iso){ if(!iso) return ""; const p=iso.split("-"); return p.length===3?`${p[2]}-${p[1]}-${p[0]}`:""; }
+function dmyToISO(str){
+  if(!str) return null;
+  str=str.trim();
+  let m=str.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+  if(m) return `${m[3]}-${pad(+m[2])}-${pad(+m[1])}`;
+  m=str.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/);
+  if(m) return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  return null;
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,10); }
+function normalizeText(s){ return String(s||"").toLowerCase().trim(); }
+
+/* ============ SMART DATE INPUTS ============ */
+function setSmartDateValue(prefix,iso){
+  const t=document.getElementById(prefix+"Text");
+  const p=document.getElementById(prefix+"Pick");
+  if(t) t.value=isoToDMY(iso);
+  if(p) p.value=iso||"";
+}
+function getSmartDateValue(prefix){
+  const t=document.getElementById(prefix+"Text").value.trim();
+  const iso=dmyToISO(t);
+  if(iso) return iso;
+  return document.getElementById(prefix+"Pick").value || null;
+}
+function showPickerFor(id){
+  const el=document.getElementById(id);
+  if(el.showPicker){ try{el.showPicker();}catch(e){el.focus();} } else { el.focus(); }
+}
+function bindSmartDate(prefix,onChange){
+  const t=document.getElementById(prefix+"Text"), p=document.getElementById(prefix+"Pick");
+  if(!t||!p) return;
+  t.addEventListener("change",()=>{
+    const iso=dmyToISO(t.value);
+    if(iso){ p.value=iso; if(onChange) onChange(iso); }
+    else{ showToast("⚠️ DD-MM-YYYY ফরম্যাটে তারিখ লেখো"); t.value=p.value?isoToDMY(p.value):""; }
+  });
+  p.addEventListener("change",()=>{ if(p.value){ t.value=isoToDMY(p.value); if(onChange) onChange(p.value); } });
+}
+function quickSetToday(prefix){
+  const iso=today();
+  setSmartDateValue(prefix,iso);
+  entryDate=iso;
+  if(prefix==="marketDate") updateMarketPreview();
+}
+
+/* ============ STORAGE ============ */
+function saveData(){
+  try{ localStorage.setItem(DB_KEY,JSON.stringify(data)); }
+  catch(err){ console.error(err); showToast("⚠️ Storage full"); }
+}
+function normalizeData(obj){
+  const clean={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+  if(!obj||typeof obj!=="object") return clean;
+  if(Array.isArray(obj.members)) clean.members=obj.members;
+  if(Array.isArray(obj.meals)) clean.meals=obj.meals.map(m=>({
+    ...m,
+    charge:Number(m.charge)||0,
+    customMeal:Number(m.customMeal)||0
+  }));
+  if(Array.isArray(obj.deposits)) clean.deposits=obj.deposits.map(d=>({...d,charge:Number(d.charge)||0}));
+  if(Array.isArray(obj.market)) clean.market=obj.market;
+  if(Array.isArray(obj.refunds)) clean.refunds=obj.refunds.map(r=>({...r,amount:Number(r.amount)||0}));
+  return clean;
+}
+function loadData(){
+  try{
+    const raw=localStorage.getItem(DB_KEY);
+    if(raw){ data=normalizeData(JSON.parse(raw)); return; }
+    const v11=localStorage.getItem("mess_manager_pro_v11");
+    if(v11){ data=normalizeData(JSON.parse(v11)); saveData(); return; }
+    const v10=localStorage.getItem("mess_manager_pro_v10");
+    if(v10){ data=normalizeData(JSON.parse(v10)); saveData(); return; }
+    const v9=localStorage.getItem("mess_manager_pro_v9");
+    if(v9){ data=normalizeData(JSON.parse(v9)); saveData(); return; }
+    const v8=localStorage.getItem("mess_manager_pro_v8");
+    if(v8){ data=normalizeData(JSON.parse(v8)); saveData(); return; }
+    const v7=localStorage.getItem("mess_manager_pro_v7");
+    if(v7){ migrateV7(JSON.parse(v7)); saveData(); return; }
+  }catch(err){ console.error(err); }
+  data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+}
+function migrateV7(old){
+  data={version:12,members:Array.isArray(old.members)?old.members:[],meals:[],deposits:[],market:[],refunds:[]};
+  if(!old.weeks) return;
+  Object.entries(old.weeks).forEach(([weekDate,w])=>{
+    if(!w) return;
+    if(Array.isArray(w.meals)) w.meals.forEach(m=>{
+      if(!m.memberId) return;
+      data.meals.push({id:m.id||uid(),memberId:m.memberId,date:m.date||weekDate,type:m.type,charge:0,customMeal:0,createdAt:m.createdAt||new Date().toISOString()});
+    });
+    if(w.payments) Object.entries(w.payments).forEach(([memberId,list])=>{
+      if(!Array.isArray(list)) return;
+      list.forEach(p=>data.deposits.push({id:p.id||uid(),memberId,date:p.date||weekDate,amount:Number(p.amount)||0,charge:0,createdAt:p.createdAt||new Date().toISOString()}));
+    });
+    if(Array.isArray(w.market)) w.market.forEach(m=>{
+      data.market.push({id:m.id||uid(),date:m.date||weekDate,purchase:Number(m.purchase)||0,paid:Number(m.paid)||0,createdAt:m.createdAt||new Date().toISOString()});
+    });
+  });
+}
+
+/* ============ MONEY / SAFETY ============ */
+function money(v){ const n=Number(v)||0; return "৳"+n.toLocaleString("en-BD",{maximumFractionDigits:2}); }
+function escapeHTML(v){ return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+function showToast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+/* ============ PAGE NAV ============ */
+function showPage(page,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const target=document.getElementById(page);
+  if(target) target.classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
+  else{ const nav=document.querySelector(`.nav button[data-page="${page}"]`); if(nav) nav.classList.add("active"); }
+  renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ============ SEARCH ============ */
+function onMemberSearch(){
+  memberSearchTerm=normalizeText(document.getElementById("memberSearch").value);
+  toggleClearButton("memberSearch","memberSearchClear");
+  renderMembers();
+}
+function clearMemberSearch(){
+  document.getElementById("memberSearch").value="";
+  memberSearchTerm="";
+  toggleClearButton("memberSearch","memberSearchClear");
+  renderMembers();
+}
+function onReportSearch(){
+  reportSearchTerm=normalizeText(document.getElementById("reportSearch").value);
+  toggleClearButton("reportSearch","reportSearchClear");
+  renderReport();
+}
+function clearReportSearch(){
+  document.getElementById("reportSearch").value="";
+  reportSearchTerm="";
+  toggleClearButton("reportSearch","reportSearchClear");
+  renderReport();
+}
+function onDepositSearch(){
+  depositSearchTerm=normalizeText(document.getElementById("depositSearch").value);
+  toggleClearButton("depositSearch","depositSearchClear");
+  renderReport();
+}
+function clearDepositSearch(){
+  document.getElementById("depositSearch").value="";
+  depositSearchTerm="";
+  toggleClearButton("depositSearch","depositSearchClear");
+  renderReport();
+}
+function toggleClearButton(inputId,btnId){
+  const val=document.getElementById(inputId).value.trim();
+  const btn=document.getElementById(btnId);
+  if(val) btn.classList.add("show"); else btn.classList.remove("show");
+}
+function filterMemberSelect(searchInputId,selectId){
+  const term=normalizeText(document.getElementById(searchInputId).value);
+  const select=document.getElementById(selectId);
+  const currentVal=select.value;
+  const filtered=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
+  if(!filtered.length){
+    select.innerHTML=`<option value="">কোনো member পাওয়া যায়নি</option>`;
+    return;
+  }
+  select.innerHTML=filtered.map(m=>`<option value="${m.id}">${escapeHTML(m.name)}</option>`).join("");
+  if(filtered.some(m=>m.id===currentVal)) select.value=currentVal;
+}
+
+/* ============ RANGE ============ */
+function inRange(date){
+  if(range.from && date<range.from) return false;
+  if(range.to && date>range.to) return false;
+  return true;
+}
+function rangeLabelText(){
+  if(range.mode==="today") return "আজ: "+formatDate(today());
+  if(range.mode==="month"){ const d=new Date(); return "এই মাস: "+d.toLocaleString("en",{month:"short"})+" "+d.getFullYear(); }
+  if(range.mode==="custom") return formatDate(range.from)+" - "+formatDate(range.to);
+  return "সার্বিক";
+}
+function setRange(mode){
+  if(mode==="all"){ range={mode,from:null,to:null}; finishRangeSet(); return; }
+  if(mode==="today"){ const t=today(); range={mode,from:t,to:t}; finishRangeSet(); return; }
+  if(mode==="month"){
+    const d=new Date();
+    const first=localDateString(new Date(d.getFullYear(),d.getMonth(),1));
+    const last=localDateString(new Date(d.getFullYear(),d.getMonth()+1,0));
+    range={mode,from:first,to:last}; finishRangeSet(); return;
+  }
+  if(mode==="custom"){
+    document.getElementById("customRangeBox").style.display="block";
+    const f=range.from||today(), t=range.to||today();
+    setSmartDateValue("rngFrom",f); setSmartDateValue("rngTo",t);
+    document.getElementById("rangeModalCurrent").textContent=rangeLabelText();
+  }
+}
+function applyCustomRange(){
+  const f=getSmartDateValue("rngFrom"), t=getSmartDateValue("rngTo");
+  if(!f||!t){ showToast("⚠️ দুটো তারিখ দাও"); return; }
+  if(f>t){ showToast("⚠️ শুরু তারিখ শেষের আগে হতে হবে"); return; }
+  range={mode:"custom",from:f,to:t};
+  finishRangeSet();
+}
+function finishRangeSet(){
+  document.getElementById("customRangeBox").style.display="none";
+  closeModal("rangeModal");
+  renderAll();
+  showToast("📅 "+rangeLabelText());
+}
+
+/* ============ CALC (range-based) ============ */
+/* mealValue now accepts either a meal object or a type string (backward compatible) */
+function mealValue(meal){
+  if(meal && typeof meal === "object"){
+    if(meal.type==="Custom") return Number(meal.customMeal)||0;
+    if(meal.type==="Breakfast") return .5;
+    if(meal.type==="Lunch") return 1;
+    if(meal.type==="Dinner") return .5;
+    return 0;
+  }
+  // string type
+  if(meal==="Breakfast") return .5;
+  if(meal==="Lunch") return 1;
+  if(meal==="Dinner") return .5;
+  return 0;
+}
+function mealsIn(memberId=null){ return data.meals.filter(m=>(!memberId||m.memberId===memberId)&&inRange(m.date)); }
+function depositsIn(memberId=null){ return data.deposits.filter(d=>(!memberId||d.memberId===memberId)&&inRange(d.date)); }
+function refundsIn(memberId=null){ return data.refunds.filter(r=>(!memberId||r.memberId===memberId)&&inRange(r.date)); }
+function marketIn(){ return data.market.filter(m=>inRange(m.date)); }
+function totalMeals(){ return mealsIn().reduce((s,m)=>s+mealValue(m),0); }
+function totalPurchase(){ return marketIn().reduce((s,m)=>s+Number(m.purchase||0),0); }
+function totalPaidShop(){ return marketIn().reduce((s,m)=>s+Number(m.paid||0),0); }
+function totalDueShop(){ return Math.max(0,totalPurchase()-totalPaidShop()); }
+function totalDeposits(){ return depositsIn().reduce((s,d)=>s+Number(d.amount||0),0); }
+function totalRefunds(){ return refundsIn().reduce((s,r)=>s+Number(r.amount||0),0); }
+function mealRate(){ const m=totalMeals(); return m<=0?0:totalPurchase()/m; }
+function memberMeals(id){ return mealsIn(id).reduce((s,m)=>s+mealValue(m),0); }
+function memberFoodCost(id){ return memberMeals(id)*mealRate(); }
+function memberPaid(id){ return depositsIn(id).reduce((s,d)=>s+Number(d.amount||0),0); }
+function memberRefunded(id){ return refundsIn(id).reduce((s,r)=>s+Number(r.amount||0),0); }
+
+/* Charges (range) */
+function chargesIn(memberId=null){
+  const mealC = mealsIn(memberId).reduce((s,m)=>s+Number(m.charge||0),0);
+  const depC = depositsIn(memberId).reduce((s,d)=>s+Number(d.charge||0),0);
+  return mealC + depC;
+}
+function memberCharges(id){ return chargesIn(id); }
+
+/* Charges (all-time) */
+function allCharges(){
+  const mealC = data.meals.reduce((s,m)=>s+Number(m.charge||0),0);
+  const depC = data.deposits.reduce((s,d)=>s+Number(d.charge||0),0);
+  return mealC + depC;
+}
+
+/* Balance */
+function memberBalance(id){ return memberPaid(id)-memberFoodCost(id)-memberCharges(id)-memberRefunded(id); }
+function memberTotalCredit(id){ return memberPaid(id)-memberFoodCost(id)-memberCharges(id); }
+function totalReceive(){ return data.members.reduce((s,m)=>s+Math.max(0,memberBalance(m.id)),0); }
+function totalCollect(){ return data.members.reduce((s,m)=>s+Math.max(0,-memberBalance(m.id)),0); }
+
+/* ============ ALL-TIME (fixed) ============ */
+function allCollected(){ return data.deposits.reduce((s,d)=>s+Number(d.amount||0),0); }
+function allMarket(){ return data.market.reduce((s,m)=>s+Number(m.purchase||0),0); }
+function allPaidShop(){ return data.market.reduce((s,m)=>s+Number(m.paid||0),0); }
+function allRefunds(){ return data.refunds.reduce((s,r)=>s+Number(r.amount||0),0); }
+function allCash(){ return allCollected()-allPaidShop()-allCharges()-allRefunds(); }
+function allShopDue(){ return Math.max(0,allMarket()-allPaidShop()); }
+
+/* ============ MODALS ============ */
+function openModal(id){
+  const modal=document.getElementById(id);
+  if(modal) modal.classList.add("show");
+  document.body.style.overflow="hidden";
+  if(id==="rangeModal"){
+    document.getElementById("todayLabel").textContent=formatDate(today());
+    const d=new Date();
+    document.getElementById("monthLabel").textContent=d.toLocaleString("en",{month:"short"})+" "+d.getFullYear();
+    document.getElementById("rangeModalCurrent").textContent=rangeLabelText();
+    document.getElementById("customRangeBox").style.display=range.mode==="custom"?"block":"none";
+    if(range.mode==="custom"){ setSmartDateValue("rngFrom",range.from); setSmartDateValue("rngTo",range.to); }
+  }
+}
+function closeModal(id){
+  const modal=document.getElementById(id);
+  if(modal) modal.classList.remove("show");
+  if(!document.querySelector(".modal.show")) document.body.style.overflow="";
+}
+function modalBackground(e,id){ if(e.target.id===id) closeModal(id); }
+
+/* ============ MEMBER ============ */
+function openMemberModal(){
+  document.getElementById("memberName").value="";
+  openModal("memberModal");
+  setTimeout(()=>document.getElementById("memberName").focus(),100);
+}
+function addMember(){
+  const input=document.getElementById("memberName");
+  const name=input.value.trim();
+  if(!name){ showToast("⚠️ Member name দে"); return; }
+  data.members.push({id:uid(),name,createdAt:new Date().toISOString()});
+  saveData(); closeModal("memberModal"); renderAll();
+  showToast("✅ "+name+" added");
+}
+function editMember(id){
+  const m=data.members.find(x=>x.id===id);
+  if(!m) return;
+  const name=prompt("নতুন নাম:",m.name);
+  if(name===null) return;
+  const trimmed=name.trim();
+  if(!trimmed){ showToast("⚠️ নাম দাও"); return; }
+  m.name=trimmed; saveData(); renderAll();
+  showToast("✅ Name updated");
+}
+function deleteMember(id){
+  const member=data.members.find(m=>m.id===id);
+  if(!member) return;
+  if(!confirm(`"${member.name}" এবং তার সব হিসাব (meal, deposit, charge, refund) delete হবে। Continue?`)) return;
+  data.members=data.members.filter(m=>m.id!==id);
+  data.meals=data.meals.filter(m=>m.memberId!==id);
+  data.deposits=data.deposits.filter(d=>d.memberId!==id);
+  data.refunds=data.refunds.filter(r=>r.memberId!==id);
+  saveData(); renderAll();
+  showToast("🗑️ Member deleted");
+}
+function fillMemberSelect(id){
+  const select=document.getElementById(id);
+  if(!data.members.length){ select.innerHTML=`<option value="">কোনো member নেই</option>`; return; }
+  select.innerHTML=data.members.map(m=>`<option value="${m.id}">${escapeHTML(m.name)}</option>`).join("");
+}
+
+/* ============ MEAL ============ */
+function toggleMealType(btn){ btn.classList.toggle("active"); }
+function openMealModal(){
+  if(!data.members.length){ showToast("⚠️ আগে Member add কর"); return; }
+  setSmartDateValue("mealDate",entryDate);
+  fillMemberSelect("mealMember");
+  document.getElementById("mealMemberSearch").value="";
+  document.querySelectorAll("#mealTypeGroup .meal-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("mealCustom").value="";
+  document.getElementById("mealCharge").value="";
+  openModal("mealModal");
+}
+function addMeal(){
+  const date=getSmartDateValue("mealDate");
+  const memberId=document.getElementById("mealMember").value;
+  const types=[...document.querySelectorAll("#mealTypeGroup .meal-btn.active")].map(b=>b.dataset.type);
+  const customMeal=Number(document.getElementById("mealCustom").value)||0;
+  const charge=Number(document.getElementById("mealCharge").value)||0;
+
+  if(!date){ showToast("⚠️ তারিখ ঠিক করে দাও"); return; }
+  if(!memberId){ showToast("⚠️ Member select কর"); return; }
+  if(!types.length && customMeal<=0){
+    showToast("⚠️ Breakfast/Lunch/Dinner select কর অথবা custom মিল সংখ্যা লেখো");
+    return;
+  }
+
+  const member=data.members.find(m=>m.id===memberId);
+  const totalEntries = types.length + (customMeal>0?1:0);
+  const chargePerEntry = totalEntries>0 ? charge/totalEntries : 0;
+
+  types.forEach(type=>data.meals.push({
+    id:uid(),memberId,date,type,
+    charge:chargePerEntry,
+    customMeal:0,
+    createdAt:new Date().toISOString()
+  }));
+
+  if(customMeal>0){
+    data.meals.push({
+      id:uid(),memberId,date,type:"Custom",
+      customMeal:customMeal,
+      charge:chargePerEntry,
+      createdAt:new Date().toISOString()
+    });
+  }
+
+  saveData(); entryDate=date;
+  closeModal("mealModal"); renderAll();
+  const totalAdded = types.reduce((s,t)=>s+mealValue(t),0) + customMeal;
+  showToast(`🍛 ${member.name}: ${totalAdded} meal${charge>0?` + ${money(charge)} charge`:""} added`);
+}
+function deleteMeal(id){
+  data.meals=data.meals.filter(m=>m.id!==id);
+  saveData(); renderAll();
+  if(activeMember) renderMemberDetail(activeMember);
+  showToast("🗑️ Meal deleted");
+}
+
+/* ============ DEPOSIT ============ */
+function openDepositModal(memberId=null){
+  if(!data.members.length){ showToast("⚠️ আগে Member add কর"); return; }
+  setSmartDateValue("depositDate",entryDate);
+  fillMemberSelect("depositMember");
+  document.getElementById("depositMemberSearch").value="";
+  if(memberId) document.getElementById("depositMember").value=memberId;
+  document.getElementById("depositAmount").value="";
+  document.getElementById("depositCharge").value="";
+  openModal("depositModal");
+}
+function addDeposit(){
+  const date=getSmartDateValue("depositDate");
+  const memberId=document.getElementById("depositMember").value;
+  const amount=Number(document.getElementById("depositAmount").value);
+  const charge=Number(document.getElementById("depositCharge").value)||0;
+  if(!date){ showToast("⚠️ তারিখ ঠিক করে দাও"); return; }
+  if(!memberId){ showToast("⚠️ Member select কর"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+  data.deposits.push({id:uid(),memberId,date,amount,charge,createdAt:new Date().toISOString()});
+  saveData(); entryDate=date;
+  closeModal("depositModal"); renderAll();
+  const member=data.members.find(m=>m.id===memberId);
+  showToast(`💵 ${member?.name||"Member"}: ${money(amount)}${charge>0?` + ${money(charge)} charge`:""} added`);
+}
+function deleteDeposit(id){
+  data.deposits=data.deposits.filter(d=>d.id!==id);
+  saveData(); renderAll();
+  if(activeMember) renderMemberDetail(activeMember);
+  showToast("🗑️ Deposit deleted");
+}
+function fromDetailDeposit(){
+  const id=activeMember;
+  closeModal("detailModal");
+  openDepositModal(id);
+}
+
+/* ============ CHARGE ============ */
+function openChargeModal(memberId){
+  if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  const m=data.members.find(x=>x.id===memberId);
+  if(!m){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  chargingMemberId=memberId;
+  document.getElementById("chargeMemberName").value=m.name;
+  setSmartDateValue("chargeDate",entryDate);
+  document.getElementById("chargeAmount").value="";
+  document.getElementById("chargeReason").value="";
+  openModal("chargeModal");
+}
+function saveCharge(){
+  const memberId=chargingMemberId;
+  const date=getSmartDateValue("chargeDate");
+  const amount=Number(document.getElementById("chargeAmount").value);
+  const reason=document.getElementById("chargeReason").value.trim();
+  if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  if(!date){ showToast("⚠️ তারিখ ঠিক কর"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+  data.deposits.push({
+    id:uid(), memberId, date,
+    amount:0, charge:amount, reason,
+    isChargeOnly:true,
+    createdAt:new Date().toISOString()
+  });
+  saveData(); entryDate=date;
+  closeModal("chargeModal"); renderAll();
+  showToast(`⚡ ${money(amount)} charge added`);
+}
+
+/* ============ REFUND ============ */
+function openRefundModal(memberId){
+  if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  const m=data.members.find(x=>x.id===memberId);
+  if(!m){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  refundingMemberId=memberId;
+  document.getElementById("refundMemberName").value=m.name;
+  setSmartDateValue("refundDate",entryDate);
+  document.getElementById("refundAmount").value="";
+  document.getElementById("refundNote").value="";
+  refreshRefundPreview();
+  openModal("refundModal");
+}
+function refreshRefundPreview(){
+  if(!refundingMemberId) return;
+  const totalCredit = memberTotalCredit(refundingMemberId);
+  const alreadyRefunded = memberRefunded(refundingMemberId);
+  const remaining = memberBalance(refundingMemberId);
+  document.getElementById("refundTotalDue").textContent = money(Math.max(0, totalCredit));
+  document.getElementById("refundAlreadyGiven").textContent = money(alreadyRefunded);
+  document.getElementById("refundRemaining").textContent = money(Math.max(0, remaining));
+
+  const inputAmount = Number(document.getElementById("refundAmount").value)||0;
+  const after = Math.max(0, remaining - inputAmount);
+  document.getElementById("refundAfter").textContent = money(after);
+}
+function fillRefundAll(){
+  const remaining = memberBalance(refundingMemberId);
+  if(remaining <= 0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
+  document.getElementById("refundAmount").value = remaining.toFixed(2);
+  refreshRefundPreview();
+}
+function fillRefundHalf(){
+  const remaining = memberBalance(refundingMemberId);
+  if(remaining <= 0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
+  document.getElementById("refundAmount").value = (remaining/2).toFixed(2);
+  refreshRefundPreview();
+}
+function saveRefund(){
+  const memberId=refundingMemberId;
+  const date=getSmartDateValue("refundDate");
+  const amount=Number(document.getElementById("refundAmount").value);
+  const note=document.getElementById("refundNote").value.trim();
+  if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
+  if(!date){ showToast("⚠️ তারিখ ঠিক কর"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+
+  const remaining = memberBalance(memberId);
+  if(remaining <= 0){
+    showToast("⚠️ এই member-এর কোনো পাওনা নেই");
+    return;
+  }
+  if(amount > remaining + 0.009){
+    showToast(`⚠️ Member-এর কাছে মাত্র ${money(remaining)} পাওনা আছে`);
+    return;
+  }
+
+  data.refunds.push({
+    id:uid(), memberId, date, amount, note,
+    createdAt:new Date().toISOString()
+  });
+  saveData(); entryDate=date;
+  closeModal("refundModal"); renderAll();
+  const member=data.members.find(m=>m.id===memberId);
+  const leftAfter = memberBalance(memberId);
+  showToast(`💸 ${member?.name||"Member"}: ${money(amount)} refunded${leftAfter>0.009?` · বাকি ${money(leftAfter)}`:""}`);
+}
+function deleteRefund(id){
+  data.refunds=data.refunds.filter(r=>r.id!==id);
+  saveData(); renderAll();
+  if(activeMember) renderMemberDetail(activeMember);
+  showToast("🗑️ Refund deleted");
+}
+function fromDetailRefund(){
+  const id=activeMember;
+  closeModal("detailModal");
+  openRefundModal(id);
+}
+
+/* ============ MARKET ============ */
+function openMarketModal(){
+  setSmartDateValue("marketDate",entryDate);
+  document.getElementById("marketPurchase").value="";
+  document.getElementById("marketPaid").value="";
+  updateMarketPreview();
+  openModal("marketModal");
+}
+function updateMarketPreview(){
+  const purchase=Number(document.getElementById("marketPurchase").value)||0;
+  const paid=Number(document.getElementById("marketPaid").value)||0;
+  const due=Math.max(0,purchase-paid);
+  document.getElementById("marketEntryDue").textContent=money(due);
+  document.getElementById("marketTotalDue").textContent=money(allShopDue()+due);
+}
+function addMarket(){
+  const date=getSmartDateValue("marketDate");
+  const purchase=Number(document.getElementById("marketPurchase").value);
+  const paid=Number(document.getElementById("marketPaid").value);
+  if(!date){ showToast("⚠️ তারিখ ঠিক করে দাও"); return; }
+  if(!Number.isFinite(purchase)||purchase<=0){ showToast("⚠️ বাজারের amount দে"); return; }
+  if(!Number.isFinite(paid)||paid<0||paid>purchase){ showToast("⚠️ Paid amount ঠিক কর"); return; }
+  data.market.push({id:uid(),date,purchase,paid,createdAt:new Date().toISOString()});
+  saveData(); entryDate=date;
+  closeModal("marketModal"); renderAll();
+  showToast("🛒 Market saved");
+}
+function deleteMarket(id){
+  if(!confirm("এই market entry delete করবি?")) return;
+  data.market=data.market.filter(m=>m.id!==id);
+  saveData(); renderAll();
+  showToast("🗑️ Market deleted");
+}
+
+/* ============ MEMBER DETAIL ============ */
+function openMemberDetail(id){ activeMember=id; renderMemberDetail(id); openModal("detailModal"); }
+function renderMemberDetail(id){
+  const member=data.members.find(m=>m.id===id);
+  if(!member) return;
+  const meals=memberMeals(id), cost=memberFoodCost(id), paid=memberPaid(id);
+  const charges=memberCharges(id), refunded=memberRefunded(id);
+  const bal=paid-cost-charges-refunded;
+  const totalCredit=paid-cost-charges;
+
+  document.getElementById("detailName").textContent=member.name;
+  document.getElementById("detailSummary").textContent=rangeLabelText();
+  document.getElementById("detailStats").innerHTML=`
+    <div class="stat glass"><div class="label">Meal</div><div class="value blue-text">${meals.toFixed(1)}</div></div>
+    <div class="stat glass"><div class="label">Food Cost</div><div class="value orange-text">${money(cost)}</div></div>
+    <div class="stat glass"><div class="label">Charges</div><div class="value purple-text">${money(charges)}</div></div>
+    <div class="stat glass"><div class="label">Paid</div><div class="value green-text">${money(paid)}</div></div>
+    <div class="stat glass"><div class="label">মোট পাওনা</div><div class="value green-text">${money(Math.max(0,totalCredit))}</div></div>
+    <div class="stat glass"><div class="label">Refunded</div><div class="value orange-text">${money(refunded)}</div></div>
+    <div class="stat glass"><div class="label">বাকি পাওনা</div><div class="value ${bal>=0?"cyan-text":"red-text"}">${money(Math.abs(bal))}</div></div>`;
+
+  /* Meal list */
+  const mealList=mealsIn(id).slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
+  document.getElementById("detailMeals").innerHTML=mealList.length?mealList.map(m=>{
+    const val=mealValue(m);
+    const label = m.type==="Custom"
+      ? `📝 Custom`
+      : escapeHTML(m.type);
+    return `
+    <div class="flow-row" style="margin-bottom:7px">
+      <span>${formatDate(m.date)} · ${label}${m.charge>0?` <span class="purple-text small">(⚡ ${money(m.charge)})</span>`:""}</span>
+      <div><b>${val}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteMeal('${m.id}')">✕</button></div>
+    </div>`;
+  }).join(""):`<div class="empty">এই সময়কালে কোনো meal নেই</div>`;
+
+  /* Charge-only list */
+  const chargeList=depositsIn(id).filter(d=>d.isChargeOnly||(Number(d.charge)>0 && Number(d.amount)===0))
+    .slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
+  document.getElementById("detailCharges").innerHTML=chargeList.length?chargeList.map(d=>`
+    <div class="flow-row" style="margin-bottom:7px">
+      <span>${formatDate(d.date)}${d.reason?` <span class="muted small">· ${escapeHTML(d.reason)}</span>`:""}</span>
+      <div><b class="purple-text">${money(d.charge)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteDeposit('${d.id}')">✕</button></div>
+    </div>`).join(""):`<div class="empty">এই সময়কালে কোনো charge নেই</div>`;
+
+  /* Refund list */
+  const refundList=refundsIn(id).slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
+  document.getElementById("detailRefunds").innerHTML=refundList.length?refundList.map(r=>`
+    <div class="flow-row" style="margin-bottom:7px">
+      <span>${formatDate(r.date)}${r.note?` <span class="muted small">· ${escapeHTML(r.note)}</span>`:""}</span>
+      <div><b class="orange-text">${money(r.amount)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteRefund('${r.id}')">✕</button></div>
+    </div>`).join(""):`<div class="empty">এই সময়কালে কোনো refund নেই</div>`;
+
+  /* Deposit list */
+  const deposits=depositsIn(id).filter(d=>Number(d.amount)>0)
+    .slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
+  document.getElementById("detailDeposits").innerHTML=deposits.length?deposits.map(d=>`
+    <div class="flow-row" style="margin-bottom:7px">
+      <span>${formatDate(d.date)}${d.charge>0?` <span class="purple-text small">(⚡ ${money(d.charge)})</span>`:""}</span>
+      <div><b class="green-text">${money(d.amount)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteDeposit('${d.id}')">✕</button></div>
+    </div>`).join(""):`<div class="empty">এই সময়কালে কোনো deposit নেই</div>`;
+}
+function copyMemberStatement(){
+  const id=activeMember;
+  const member=data.members.find(m=>m.id===id);
+  if(!member) return;
+  const meals=memberMeals(id), cost=memberFoodCost(id), paid=memberPaid(id);
+  const charges=memberCharges(id), refunded=memberRefunded(id);
+  const bal=paid-cost-charges-refunded;
+  const status=bal>0.009?"পাবে":(bal<-0.009?"দিতে হবে":"সেটেলড");
+  const text=`📋 ${member.name} — মেস স্টেটমেন্ট (${rangeLabelText()})\nমোট মিল: ${meals.toFixed(1)}\nফুড কস্ট: ${money(cost)}\nচার্জ: ${money(charges)}\nজমা: ${money(paid)}\nফেরত দেওয়া: ${money(refunded)}\nবাকি পাওনা: ${money(Math.abs(bal))} (${status})`;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast("📋 কপি হয়েছে")).catch(()=>fallbackCopy(text));
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta=document.createElement("textarea");
+  ta.value=text; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); showToast("📋 কপি হয়েছে"); }catch(e){ showToast("❌ কপি ব্যর্থ"); }
+  ta.remove();
+}
+
+/* ============ RENDER: HOME ============ */
+function renderHome(){
+  document.getElementById("sPurchase").textContent=money(totalPurchase());
+  document.getElementById("sMeals").textContent=totalMeals().toFixed(1);
+  document.getElementById("sRate").textContent=money(mealRate());
+  document.getElementById("sDue").textContent=money(totalDueShop());
+  document.getElementById("fDeposit").textContent=money(totalDeposits());
+  document.getElementById("fFood").textContent=money(totalPurchase());
+  document.getElementById("fCharges").textContent=money(chargesIn());
+  document.getElementById("fRefunds").textContent=money(totalRefunds());
+  document.getElementById("fReceive").textContent=money(totalReceive());
+  document.getElementById("fCollect").textContent=money(totalCollect());
+  document.getElementById("flowIn").textContent=money(totalDeposits());
+  document.getElementById("flowPurchase").textContent=money(totalPurchase());
+  document.getElementById("flowPaid").textContent=money(totalPaidShop());
+  document.getElementById("flowDue").textContent=money(totalDueShop());
+  document.getElementById("flowCharges").textContent=money(chargesIn());
+  document.getElementById("flowRefunds").textContent=money(totalRefunds());
+  document.getElementById("flowBalance").textContent=money(totalDeposits()-totalPaidShop());
+
+  /* All-time overview */
+  document.getElementById("ovCollected").textContent=money(allCollected());
+  document.getElementById("ovMarket").textContent=money(allMarket());
+  document.getElementById("ovPaidShop").textContent=money(allPaidShop());
+  document.getElementById("ovCharges").textContent=money(allCharges());
+  document.getElementById("ovRefunds").textContent=money(allRefunds());
+  document.getElementById("ovCash").textContent=money(allCash());
+  document.getElementById("ovShopDue").textContent=money(allShopDue());
+
+  /* Real-time cash position */
+  document.getElementById("cashTotalIn").textContent=money(allCollected());
+  document.getElementById("cashPaidShop").textContent=money(allPaidShop());
+  document.getElementById("cashCharges").textContent=money(allCharges());
+  document.getElementById("cashRefunds").textContent=money(allRefunds());
+  document.getElementById("cashRemaining").textContent=money(allCash());
+
+  renderDueList();
+}
+function renderDueList(){
+  const box=document.getElementById("dueList");
+  if(!data.members.length){ box.innerHTML=`<div class="empty">কোনো সদস্য নেই</div>`; return; }
+  const rows=data.members.map(m=>({m,bal:memberBalance(m.id),refunded:memberRefunded(m.id)}));
+  const owe=rows.filter(r=>r.bal<-0.009).sort((a,b)=>a.bal-b.bal);
+  const get=rows.filter(r=>r.bal>0.009).sort((a,b)=>b.bal-a.bal);
+  let html="";
+  if(owe.length){
+    html+=`<div class="small muted" style="margin-bottom:6px">🔴 যাদের কাছে পাওনা আছে</div>`;
+    html+=owe.map(r=>`<div class="flow-row"><span>${escapeHTML(r.m.name)}</span><b class="red-text">${money(Math.abs(r.bal))}</b></div>`).join("");
+  }
+  if(get.length){
+    html+=`<div class="small muted" style="margin:10px 0 6px">🟢 যাদের ফেরত দিতে হবে</div>`;
+    html+=get.map(r=>`<div class="flow-row">
+      <span>${escapeHTML(r.m.name)}${r.refunded>0?` <span class="small muted">(ফেরত দিয়েছ ${money(r.refunded)})</span>`:""}</span>
+      <b class="green-text">${money(r.bal)}</b></div>`).join("");
+  }
+  if(!owe.length && !get.length) html=`<div class="empty">✅ সবাই সেটেলড</div>`;
+  box.innerHTML=html;
+}
+
+/* ============ RENDER: MEMBERS ============ */
+function renderMembers(){
+  const box=document.getElementById("memberList");
+  document.getElementById("memberCount").textContent=data.members.length;
+
+  if(!data.members.length){
+    document.getElementById("memberShownCount").textContent="0";
+    box.innerHTML=`<div class="empty">এখনো কোনো member নেই<br><br><button class="btn primary" onclick="openMemberModal()">+ Add First Member</button></div>`;
+    return;
+  }
+
+  const term=memberSearchTerm;
+  const filtered=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
+  document.getElementById("memberShownCount").textContent=filtered.length;
+
+  if(!filtered.length){
+    box.innerHTML=`<div class="empty">🔍 "${escapeHTML(document.getElementById("memberSearch").value)}" নামে কোনো member পাওয়া যায়নি</div>`;
+    return;
+  }
+
+  box.innerHTML=filtered.map(m=>{
+    const bal=memberBalance(m.id);
+    const refunded=memberRefunded(m.id);
+    let status="Settled", cls="cyan-text";
+    if(bal>0.009){ status="পাবে"; cls="green-text"; }
+    if(bal<-0.009){ status="দেবে"; cls="red-text"; }
+    const initials=m.name.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+    const refundBtn = bal>0.009
+      ? `<button class="btn orange" style="padding:6px 4px;font-size:11px" onclick="openRefundModal('${m.id}')" title="Refund">💸</button>`
+      : `<button class="btn" style="padding:6px 4px;font-size:11px;opacity:.4" onclick="openRefundModal('${m.id}')" title="Refund">💸</button>`;
+    return `<div class="member">
+      <div class="avatar" onclick="openMemberDetail('${m.id}')">${escapeHTML(initials)}</div>
+      <div class="member-info" onclick="openMemberDetail('${m.id}')">
+        <b>${escapeHTML(m.name)}</b>
+        <small>Meal: ${memberMeals(m.id).toFixed(1)} · Paid: ${money(memberPaid(m.id))}${memberCharges(m.id)>0?` · ⚡${money(memberCharges(m.id))}`:""}${refunded>0?` · 💸${money(refunded)}`:""}</small>
+      </div>
+      <div class="member-balance">
+        <b class="${cls}">${bal<0?"-":""}${money(Math.abs(bal))}</b>
+        <small class="${cls}">${status}</small>
+      </div>
+      <div class="member-actions">
+        ${refundBtn}
+        <button class="btn purple" style="padding:6px 4px;font-size:11px" onclick="openChargeModal('${m.id}')" title="Charge">⚡</button>
+        <button class="btn" style="padding:6px 4px;font-size:11px" onclick="editMember('${m.id}')">✎</button>
+        <button class="btn" style="padding:6px 4px;font-size:11px" onclick="deleteMember('${m.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ============ RENDER: MARKET ============ */
+function renderMarket(){
+  const purchase=totalPurchase(), paid=totalPaidShop(), due=totalDueShop();
+  document.getElementById("mPurchase").textContent=money(purchase);
+  document.getElementById("mPaid").textContent=money(paid);
+  document.getElementById("mDue").textContent=money(due);
+  const list=marketIn().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+  document.getElementById("mCount").textContent=list.length;
+  const box=document.getElementById("marketList");
+  if(!list.length){ box.innerHTML=`<div class="empty">এই সময়কালে কোনো market entry নেই</div>`; return; }
+  box.innerHTML=list.map(m=>{
+    const entryDue=Math.max(0,Number(m.purchase||0)-Number(m.paid||0));
+    return `<div class="market-row">
+      <div class="market-top">
+        <div><b>🛒 ${formatDate(m.date)}</b><div class="small muted">Market Entry</div></div>
+        <button class="btn" style="padding:6px 9px" onclick="deleteMarket('${m.id}')">🗑️</button>
+      </div>
+      <div class="market-money">
+        <div class="money-box"><small>বাজার</small><b class="orange-text">${money(m.purchase)}</b></div>
+        <div class="money-box"><small>দেওয়া</small><b class="green-text">${money(m.paid)}</b></div>
+        <div class="money-box"><small>এই এন্ট্রির বাকি</small><b class="red-text">${money(entryDue)}</b></div>
+        <div class="money-box"><small>Total Due (সার্বিক)</small><b class="purple-text">${money(allShopDue())}</b></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ============ RENDER: REPORT ============ */
+function renderReport(){
+  document.getElementById("reportRangeLabel").textContent=rangeLabelText();
+  document.getElementById("rDeposit").textContent=money(totalDeposits());
+  document.getElementById("rPurchase").textContent=money(totalPurchase());
+  document.getElementById("rPaid").textContent=money(totalPaidShop());
+  document.getElementById("rDue").textContent=money(totalDueShop());
+  document.getElementById("rMeals").textContent=totalMeals().toFixed(1);
+  document.getElementById("rRate").textContent=money(mealRate());
+  document.getElementById("rCharges").textContent=money(chargesIn());
+  document.getElementById("rRefunds").textContent=money(totalRefunds());
+  document.getElementById("rCash").textContent=money(totalDeposits()-totalPaidShop()-chargesIn()-totalRefunds());
+
+  /* Member Settlement (with search) */
+  const memberReport=document.getElementById("memberReport");
+  const term=reportSearchTerm;
+  const filteredMembers=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
+  if(!data.members.length){
+    memberReport.innerHTML=`<tr><td colspan="8">No members</td></tr>`;
+  } else if(!filteredMembers.length){
+    memberReport.innerHTML=`<tr><td colspan="8">🔍 কোনো member পাওয়া যায়নি</td></tr>`;
+  } else {
+    memberReport.innerHTML=filteredMembers.map(m=>{
+      const meal=memberMeals(m.id), cost=memberFoodCost(m.id), ch=memberCharges(m.id);
+      const pd=memberPaid(m.id), rf=memberRefunded(m.id);
+      const bal=pd-cost-ch-rf;
+      let status="Settled", cls="cyan";
+      if(bal>0.009){ status="Receive"; cls="green"; }
+      if(bal<-0.009){ status="Pay"; cls="red"; }
+      return `<tr><td>${escapeHTML(m.name)}</td><td>${meal.toFixed(1)}</td><td>${money(cost)}</td><td class="purple-text">${money(ch)}</td><td>${money(pd)}</td><td class="orange-text">${money(rf)}</td>
+        <td class="${cls==="green"?"green-text":cls==="red"?"red-text":"cyan-text"}">${bal<0?"-":""}${money(Math.abs(bal))}</td><td><span class="badge ${cls}">${status}</span></td></tr>`;
+    }).join("");
+  }
+
+  /* Market Report */
+  const marketReport=document.getElementById("marketReport");
+  const markets=marketIn().slice().sort((a,b)=>a.date.localeCompare(b.date));
+  marketReport.innerHTML=markets.map(m=>{
+    const p=Number(m.purchase||0), pd=Number(m.paid||0), d=Math.max(0,p-pd);
+    return `<tr><td>${formatDate(m.date)}</td><td class="orange-text">${money(p)}</td><td class="green-text">${money(pd)}</td><td class="red-text">${money(d)}</td></tr>`;
+  }).join("")||`<tr><td colspan="4">No market data</td></tr>`;
+
+  /* Transaction History (Deposit + Charge + Refund) */
+  const txList=[];
+  depositsIn().forEach(d=>{
+    txList.push({date:d.date, createdAt:d.createdAt||"", memberId:d.memberId, kind:"deposit", amount:d.amount, charge:d.charge, note:d.reason, isChargeOnly:d.isChargeOnly});
+  });
+  refundsIn().forEach(r=>{
+    txList.push({date:r.date, createdAt:r.createdAt||"", memberId:r.memberId, kind:"refund", amount:r.amount, note:r.note});
+  });
+  txList.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)) || b.date.localeCompare(a.date));
+
+  const dterm=depositSearchTerm;
+  const filteredTx=txList.filter(t=>{
+    if(!dterm) return true;
+    const member=data.members.find(x=>x.id===t.memberId);
+    return normalizeText(member?.name).includes(dterm);
+  });
+
+  if(!filteredTx.length){
+    document.getElementById("depositReport").innerHTML=`<tr><td colspan="4">${dterm?"🔍 কোনো entry পাওয়া যায়নি":"No transaction data"}</td></tr>`;
+  } else {
+    document.getElementById("depositReport").innerHTML=filteredTx.map(t=>{
+      const member=data.members.find(x=>x.id===t.memberId);
+      let typeLabel, amountDisplay;
+      if(t.kind==="refund"){
+        typeLabel = `<span class="badge orange">Refund</span>`;
+        amountDisplay = `<span class="orange-text">💸 ${money(t.amount)}</span>${t.note?` <span class="small muted">· ${escapeHTML(t.note)}</span>`:""}`;
+      } else if(t.isChargeOnly || (Number(t.charge)>0 && Number(t.amount)===0)){
+        typeLabel = `<span class="badge">Charge</span>`;
+        amountDisplay = `<span class="purple-text">⚡ ${money(t.charge)}</span>${t.note?` <span class="small muted">· ${escapeHTML(t.note)}</span>`:""}`;
+      } else if(Number(t.charge)>0){
+        typeLabel = `<span class="badge">Deposit+Charge</span>`;
+        amountDisplay = `<span class="green-text">${money(t.amount)}</span> + <span class="purple-text">⚡${money(t.charge)}</span>`;
+      } else {
+        typeLabel = `<span class="badge green">Deposit</span>`;
+        amountDisplay = `<span class="green-text">${money(t.amount)}</span>`;
+      }
+      return `<tr><td>${formatDate(t.date)}</td><td>${escapeHTML(member?.name||"Unknown")}</td><td>${typeLabel}</td><td>${amountDisplay}</td></tr>`;
+    }).join("");
+  }
+}
+
+/* ============ RENDER ALL ============ */
+function renderAll(){
+  document.querySelectorAll(".range-badge").forEach(el=>el.textContent=rangeLabelText());
+  document.getElementById("rangeChipText").textContent=rangeLabelText();
+  document.getElementById("todayText").textContent=formatDate(today());
+  renderHome(); renderMembers(); renderMarket(); renderReport();
+  if(activeMember && document.getElementById("detailModal").classList.contains("show")) renderMemberDetail(activeMember);
+}
+
+/* ============ BACKUP / RESTORE / CLEAR ============ */
+function backupPayload(){
+  return JSON.stringify({app:"Mess Manager Pro",version:12,exportedAt:new Date().toISOString(),range,data},null,2);
+}
+function downloadBackup(){
+  const blob=new Blob([backupPayload()],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download=`mess-manager-backup-${today()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showToast("⬇️ Backup downloaded");
+}
+function restoreBackup(){ document.getElementById("restoreFile").click(); }
+function restorePayload(text){
+  try{
+    const parsed=JSON.parse(text);
+    const restored=parsed.data?normalizeData(parsed.data):normalizeData(parsed);
+    if(!confirm("বর্তমান data replace হবে। Continue?")) return;
+    data=restored;
+    saveData(); renderAll();
+    showToast("✅ Backup restored");
+  }catch(err){ console.error(err); showToast("❌ Invalid backup"); }
+}
+function clearAllData(){
+  if(!confirm("সব Member, Meal, Deposit, Charge, Refund এবং Market data permanently delete হবে। Continue?")) return;
+  data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+  saveData(); activeMember=null; renderAll();
+  showToast("🗑️ সব data clear হয়েছে");
+}
+
+/* ============ EVENTS ============ */
+bindSmartDate("mealDate",iso=>{ entryDate=iso; });
+bindSmartDate("depositDate",iso=>{ entryDate=iso; });
+bindSmartDate("marketDate",iso=>{ entryDate=iso; updateMarketPreview(); });
+bindSmartDate("chargeDate",iso=>{ entryDate=iso; });
+bindSmartDate("refundDate",iso=>{ entryDate=iso; });
+bindSmartDate("rngFrom",()=>{});
+bindSmartDate("rngTo",()=>{});
+
+document.getElementById("marketPurchase").addEventListener("input",updateMarketPreview);
+document.getElementById("marketPaid").addEventListener("input",updateMarketPreview);
+document.getElementById("refundAmount").addEventListener("input",refreshRefundPreview);
+
+document.getElementById("restoreFile").addEventListener("change",function(){
+  const file=this.files?.[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{ restorePayload(reader.result); this.value=""; };
+  reader.readAsText(file);
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") document.querySelectorAll(".modal.show").forEach(modal=>closeModal(modal.id));
+});
+
+/* Midnight auto update */
+let lastDate=today();
+setInterval(()=>{
+  const now=today();
+  if(now!==lastDate){
+    lastDate=now;
+    if(range.mode==="today"){ range.from=now; range.to=now; }
+    if(range.mode==="month"){ setRange("month"); }
+    entryDate=now;
+    renderAll();
+  }
+},30000);
+
+/* ============ INIT ============ */
+loadData();
+entryDate=today();
+renderAll();
+</script>
+</body>
+</html>
