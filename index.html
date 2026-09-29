@@ -5,139 +5,470 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#06101d">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Mess Manager Pro V12</title>
+<title>Mess Manager Pro V999+</title>
 <style>
 :root{
-  --bg:#06101d; --card:rgba(15,27,43,.86); --line:rgba(255,255,255,.09);
-  --text:#f4f8ff; --muted:#8fa1b8; --green:#37e6a1; --blue:#54a9ff;
-  --orange:#ffb454; --red:#ff667d; --purple:#a982ff; --cyan:#46dff5;
-  --shadow:0 12px 35px rgba(0,0,0,.25); --radius:20px;
-  box-sizing:border-box;
+  --bg:#04080f; --text:#f4f8ff; --muted:#8fa1b8;
+  --green:#37e6a1; --blue:#54a9ff; --orange:#ffb454;
+  --red:#ff667d; --purple:#a982ff; --cyan:#46dff5;
+  --radius:24px;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);}
+html{scroll-behavior:smooth;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{margin:0;min-height:100vh;padding-bottom:calc(95px + env(safe-area-inset-bottom,0px));overflow-x:hidden;
-  background:radial-gradient(circle at 10% 0%,rgba(84,169,255,.10),transparent 30%),
-    radial-gradient(circle at 90% 20%,rgba(55,230,161,.08),transparent 30%),var(--bg);
-  color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+
+body{
+  margin:0;min-height:100vh;
+  padding-bottom:calc(95px + env(safe-area-inset-bottom,0px));
+  overflow-x:hidden;position:relative;
+  background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeSpeed;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(84,169,255,.16),transparent 42%),
+    radial-gradient(circle at 88% 18%,rgba(55,230,161,.13),transparent 42%),
+    radial-gradient(circle at 40% 92%,rgba(169,130,255,.11),transparent 45%),
+    radial-gradient(circle at 92% 88%,rgba(70,223,245,.10),transparent 45%);
+}
+
 button,input,select{font:inherit;}
-button{border:0;cursor:pointer;}
-.app{width:min(1100px,100%);margin:auto;padding:16px;}
+button{border:0;cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:manipulation;}
+
+.app{width:min(1100px,100%);margin:auto;padding:16px;position:relative;z-index:1;}
+
+/* ============ 3D TEXT / HEADINGS ============ */
+h1,h2,h3,.brand h1,.card-title h2,.card-title h3{
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.10),
+    0 2px 4px rgba(0,0,0,.45),
+    0 4px 12px rgba(0,0,0,.25);
+  letter-spacing:.25px;
+}
+.stat .value,.money-box b,.member-balance b{
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.10),
+    0 2px 5px rgba(0,0,0,.42);
+}
+.badge,.small,.muted{text-shadow:0 1px 2px rgba(0,0,0,.30);}
+
+/* ---------- HEADER ---------- */
 .header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;}
 .brand{display:flex;align-items:center;gap:12px;min-width:0;}
 .logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:23px;flex:none;
-  background:linear-gradient(135deg,#54a9ff,#37e6a1);color:#06101d;}
+  background:linear-gradient(135deg,#54a9ff,#37e6a1);color:#06101d;
+  box-shadow:
+    0 8px 18px rgba(84,169,255,.28),
+    0 2px 6px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.5),
+    inset 0 -1px 0 rgba(0,0,0,.18);
+  text-shadow:0 1px 2px rgba(0,0,0,.15);}
 .brand h1{margin:0;font-size:18px;}
 .brand small{color:var(--muted);font-size:11px;}
-.hgroup{display:flex;align-items:center;gap:8px;}
-.range-chip{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:14px;
-  background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text);font-size:12px;white-space:nowrap;}
+.hgroup{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+.range-chip,.icon-btn{
+  display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:14px;
+  background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.02) 60%,rgba(255,255,255,.06)),rgba(11,25,41,.70);
+  border:1px solid rgba(255,255,255,.10);
+  border-top-color:rgba(255,255,255,.22);
+  border-bottom-color:rgba(0,0,0,.30);
+  color:var(--text);font-size:12px;white-space:nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(255,255,255,.03),
+    0 2px 4px rgba(0,0,0,.20),
+    0 6px 16px rgba(0,0,0,.28);
+  position:relative;overflow:hidden;}
+.icon-btn{width:38px;height:38px;padding:0;justify-content:center;font-size:17px;}
+.icon-btn:disabled{opacity:.35;pointer-events:none;}
 .live{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--green);}
-.live i{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green);}
-.page{display:none;animation:pageIn .2s ease;}
-.page.active{display:block;}
-.glass{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+.live i{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);}
+
+/* ---------- PAGES ---------- */
+.page{display:none;}
+.page.active{display:block;animation:pageIn .25s cubic-bezier(.22,1,.36,1);}
+
+/* ---------- 3D LAYERED GLASS ---------- */
+.glass{
+  position:relative;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.11) 0%,
+      rgba(255,255,255,.045) 12%,
+      rgba(255,255,255,.020) 45%,
+      rgba(255,255,255,.012) 72%,
+      rgba(255,255,255,.055) 100%),
+    linear-gradient(180deg, rgba(16,28,46,.78), rgba(8,16,28,.82));
+  border:1px solid rgba(255,255,255,.09);
+  border-top-color:rgba(255,255,255,.22);
+  border-bottom-color:rgba(0,0,0,.28);
+  border-radius:var(--radius);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(255,255,255,.02),
+    inset 0 0 30px rgba(84,169,255,.04),
+    0 1px 2px rgba(0,0,0,.22),
+    0 10px 26px rgba(0,0,0,.32),
+    0 22px 60px rgba(0,0,0,.20);
+  contain:layout paint style;
+  transform:translateZ(0);
+}
+.glass::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(120% 70% at 0% 0%,rgba(255,255,255,.11),transparent 55%),
+    radial-gradient(100% 80% at 100% 100%,rgba(84,169,255,.05),transparent 60%);
+}
+.glass>*{position:relative;z-index:1;}
+
 .card{padding:17px;margin-bottom:14px;}
 .card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap;}
 .card-title h2,.card-title h3{margin:0;font-size:16px;}
 .muted{color:var(--muted);}
 .small{font-size:12px;}
-input,select{width:100%;border:1px solid var(--line);outline:none;background:rgba(255,255,255,.055);
-  color:var(--text);border-radius:14px;padding:12px 13px;}
-input:focus,select:focus{border-color:rgba(84,169,255,.65);}
+
+/* ---------- INPUTS ---------- */
+input,select{width:100%;border:1px solid rgba(255,255,255,.11);outline:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.20),rgba(255,255,255,.05));
+  color:var(--text);border-radius:14px;padding:12px 13px;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.05);
+  transition:border-color .18s,box-shadow .18s;}
+input:focus,select:focus{border-color:rgba(84,169,255,.65);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.35),0 0 0 3px rgba(84,169,255,.14);}
 input[type="date"]{color-scheme:dark;}
 input[readonly]{opacity:.7;}
 option{background:#0b1929;color:white;}
 label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px;}
 .form-group{margin-bottom:13px;}
-.btn{min-height:43px;padding:10px 15px;border-radius:13px;color:white;background:rgba(255,255,255,.075);border:1px solid var(--line);}
-.btn:active{transform:scale(.97);}
-.btn.primary{background:linear-gradient(135deg,#328ff0,#4cb7ff);}
-.btn.green{background:linear-gradient(135deg,#1dbb83,#37e6a1);color:#03130d;}
-.btn.orange{background:linear-gradient(135deg,#ed9637,#ffc363);color:#1b1003;}
-.btn.red{background:linear-gradient(135deg,#df4964,#ff7184);}
-.btn.purple{background:linear-gradient(135deg,#8060db,#ac8cff);}
+
+/* ---------- BUTTONS ---------- */
+.btn,.quick,.nav button,.meal-btn,.dtbtn,.range-chip,.icon-btn,.search-clear,.close{
+  position:relative;overflow:hidden;
+  transform:translateZ(0);backface-visibility:hidden;
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1),
+             background .2s ease,
+             box-shadow .2s ease;
+}
+.btn:active,.btn.pressed,
+.quick:active,.quick.pressed,
+.nav button:active,.nav button.pressed,
+.meal-btn:active,.meal-btn.pressed,
+.dtbtn:active,.dtbtn.pressed,
+.range-chip:active,.range-chip.pressed,
+.icon-btn:active,.icon-btn.pressed,
+.search-clear:active,.search-clear.pressed,
+.close:active,.close.pressed{
+  transform:scale(.955) translateZ(0);
+  transition:transform .07s cubic-bezier(.4,0,.2,1);
+}
+.btn::after,.quick::after,.nav button::after,.meal-btn::after,.dtbtn::after,
+.range-chip::after,.icon-btn::after,.search-clear::after,.close::after{
+  content:'';position:absolute;left:0;top:0;
+  width:140px;height:140px;margin:-70px 0 0 -70px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.42) 0%,rgba(255,255,255,.12) 35%,transparent 68%);
+  opacity:0;
+  transform:translate3d(var(--px,50%),var(--py,50%),0) scale(.2);
+  transition:opacity .28s ease, transform .28s cubic-bezier(.4,0,.2,1);
+}
+.btn:active::after,.btn.pressed::after,
+.quick:active::after,.quick.pressed::after,
+.nav button:active::after,.nav button.pressed::after,
+.meal-btn:active::after,.meal-btn.pressed::after,
+.dtbtn:active::after,.dtbtn.pressed::after,
+.range-chip:active::after,.range-chip.pressed::after,
+.icon-btn:active::after,.icon-btn.pressed::after,
+.search-clear:active::after,.search-clear.pressed::after,
+.close:active::after,.close.pressed::after{
+  opacity:1;
+  transform:translate3d(var(--px,50%),var(--py,50%),0) scale(1);
+  transition:opacity .04s, transform .12s cubic-bezier(.4,0,.2,1);
+}
+
+.btn{min-height:44px;padding:10px 15px;border-radius:13px;color:white;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.11);
+  border-top-color:rgba(255,255,255,.22);
+  border-bottom-color:rgba(0,0,0,.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.18),
+    0 2px 4px rgba(0,0,0,.22),
+    0 6px 14px rgba(0,0,0,.24);
+  text-shadow:0 1px 2px rgba(0,0,0,.35);}
+.btn.primary{background:linear-gradient(135deg,#328ff0,#4cb7ff);border-color:rgba(84,169,255,.5);}
+.btn.green{background:linear-gradient(135deg,#1dbb83,#37e6a1);color:#03130d;border-color:rgba(55,230,161,.5);text-shadow:0 1px 1px rgba(255,255,255,.20);}
+.btn.orange{background:linear-gradient(135deg,#ed9637,#ffc363);color:#1b1003;border-color:rgba(255,180,84,.5);text-shadow:0 1px 1px rgba(255,255,255,.20);}
+.btn.red{background:linear-gradient(135deg,#df4964,#ff7184);border-color:rgba(255,102,125,.5);}
+.btn.purple{background:linear-gradient(135deg,#8060db,#ac8cff);border-color:rgba(169,130,255,.5);}
 .btn.full{width:100%;}
+.btn.icon-mini{padding:4px 8px;min-height:auto;font-size:11px;border-radius:9px;}
+
+/* ---------- STATS ---------- */
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
 .stat{padding:15px;min-height:100px;}
 .stat .label{color:var(--muted);font-size:11px;}
 .stat .value{font-size:20px;font-weight:800;margin-top:7px;word-break:break-word;}
 .green-text{color:var(--green)} .blue-text{color:var(--blue)} .orange-text{color:var(--orange)}
 .red-text{color:var(--red)} .purple-text{color:var(--purple)} .cyan-text{color:var(--cyan)}
+
 .quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.quick{padding:15px;text-align:left;border-radius:17px;background:rgba(255,255,255,.045);border:1px solid var(--line);color:var(--text);}
-.quick b{display:block;margin-bottom:4px;}
+.quick{padding:15px;text-align:left;border-radius:17px;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 60%,rgba(255,255,255,.05)),rgba(11,25,41,.65);
+  border:1px solid rgba(255,255,255,.10);
+  border-top-color:rgba(255,255,255,.20);
+  border-bottom-color:rgba(0,0,0,.28);
+  color:var(--text);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.15),
+    0 4px 12px rgba(0,0,0,.22),
+    0 10px 24px rgba(0,0,0,.16);}
+.quick b{display:block;margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,.4);}
 .quick span{color:var(--muted);font-size:11px;}
+
 .flow{display:grid;gap:8px;}
-.flow-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.035);border-radius:13px;}
-.flow-row.highlight{background:rgba(70,223,245,.08);border:1px solid rgba(70,223,245,.25);}
-.member{display:flex;align-items:center;gap:9px;padding:13px;margin-bottom:9px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:16px;}
+.flow-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border-radius:13px;border:1px solid rgba(255,255,255,.06);
+  border-top-color:rgba(255,255,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.flow-row.highlight{background:linear-gradient(180deg,rgba(70,223,245,.13),rgba(70,223,245,.04));border-color:rgba(70,223,245,.25);}
+
+.member{display:flex;align-items:center;gap:9px;padding:13px;margin-bottom:9px;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015) 60%,rgba(255,255,255,.04)),rgba(11,25,41,.55);
+  border:1px solid rgba(255,255,255,.08);
+  border-top-color:rgba(255,255,255,.14);
+  border-bottom-color:rgba(0,0,0,.22);
+  border-radius:16px;
+  contain:layout paint;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 4px 10px rgba(0,0,0,.20);
+  transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s;}
+.member.pressed{transform:scale(.985);background:rgba(255,255,255,.075);}
 .avatar{width:43px;height:43px;flex:none;border-radius:14px;display:grid;place-items:center;
-  background:linear-gradient(135deg,rgba(84,169,255,.25),rgba(55,230,161,.2));color:var(--blue);font-weight:800;}
-.member-info{flex:1;min-width:0;}
-.member-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  background:linear-gradient(135deg,rgba(84,169,255,.30),rgba(55,230,161,.22));color:var(--blue);font-weight:800;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.25);
+  text-shadow:0 1px 2px rgba(0,0,0,.30);}
+.member-info{flex:1;min-width:0;cursor:pointer;}
+.member-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.35);}
 .member-info small{color:var(--muted);}
 .member-balance{text-align:right;min-width:74px;}
 .member-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;min-width:70px;}
+
 .meal-types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.meal-btn{padding:13px 4px;text-align:center;line-height:1.5;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;color:var(--text);}
-.meal-btn.active{color:#06101d;background:var(--green);border-color:var(--green);}
-.market-row{padding:14px;margin-bottom:9px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line);}
+.meal-btn{padding:13px 4px;text-align:center;line-height:1.5;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.11);
+  border-top-color:rgba(255,255,255,.18);
+  border-radius:13px;color:var(--text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);}
+.meal-btn.active{color:#06101d;background:linear-gradient(180deg,#4bedb0,#2ecf8b);border-color:rgba(55,230,161,.55);
+  box-shadow:0 4px 14px rgba(55,230,161,.35),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.15);
+  text-shadow:0 1px 1px rgba(255,255,255,.25);}
+
+/* ---------- MARKET ---------- */
+.market-row{padding:14px;margin-bottom:9px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015) 60%,rgba(255,255,255,.04)),rgba(11,25,41,.55);
+  border:1px solid rgba(255,255,255,.08);
+  border-top-color:rgba(255,255,255,.14);
+  border-bottom-color:rgba(0,0,0,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 4px 10px rgba(0,0,0,.20);
+  contain:layout paint;}
 .market-top{display:flex;justify-content:space-between;gap:10px;}
 .market-money{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px;}
-.money-box{padding:9px;border-radius:11px;background:rgba(255,255,255,.035);}
+.money-box{padding:9px;border-radius:11px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
 .money-box small{display:block;color:var(--muted);font-size:10px;}
 .money-box b{display:block;margin-top:3px;}
+
+/* NEW: Market item chips */
+.market-items-chips{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;
+  padding:10px;border-radius:12px;
+  background:rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.05);
+}
+.market-item-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 9px;border-radius:9px;font-size:11px;
+  background:linear-gradient(180deg,rgba(84,169,255,.16),rgba(84,169,255,.06));
+  border:1px solid rgba(84,169,255,.22);
+  border-top-color:rgba(255,255,255,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+  text-shadow:0 1px 1px rgba(0,0,0,.30);
+}
+.market-item-chip b{color:var(--cyan);font-weight:700;}
+
+/* NEW: market item editor rows */
+.market-items-container{display:flex;flex-direction:column;gap:7px;margin-bottom:8px;}
+.market-item-row{
+  display:grid;grid-template-columns:1.5fr 1fr 40px;gap:6px;align-items:center;
+  padding:7px;border-radius:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.06);
+  border-top-color:rgba(255,255,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  animation:rowIn .25s cubic-bezier(.22,1,.36,1);
+}
+.market-item-row input{padding:9px 11px;font-size:12px;border-radius:10px;}
+.market-item-row .btn.icon-mini{width:36px;height:36px;padding:0;font-size:14px;border-radius:10px;}
+.market-items-total{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:10px;padding:11px 14px;border-radius:12px;
+  background:linear-gradient(180deg,rgba(70,223,245,.13),rgba(70,223,245,.05));
+  border:1px solid rgba(70,223,245,.28);
+  border-top-color:rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 6px rgba(0,0,0,.20);
+  font-size:13px;
+}
+.market-items-total b{font-size:16px;color:var(--cyan);text-shadow:0 1px 4px rgba(70,223,245,.30),0 2px 4px rgba(0,0,0,.4);}
+
+/* ---------- TABLES ---------- */
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;min-width:500px;}
-th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:12px;}
-th{color:var(--muted);}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.09);font-size:12px;}
+th{color:var(--muted);text-shadow:0 1px 2px rgba(0,0,0,.35);}
 .badge{display:inline-flex;padding:4px 8px;border-radius:8px;font-size:10px;background:rgba(255,255,255,.07);}
 .badge.green{background:rgba(55,230,161,.15);color:var(--green);}
 .badge.red{background:rgba(255,102,125,.15);color:var(--red);}
 .badge.cyan{background:rgba(70,223,245,.15);color:var(--cyan);}
 .badge.orange{background:rgba(255,180,84,.15);color:var(--orange);}
-.nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:700px;margin:auto;z-index:50;padding:7px;
-  display:grid;grid-template-columns:repeat(5,1fr);background:rgba(8,19,32,.94);border:1px solid var(--line);
-  border-radius:22px;box-shadow:0 15px 45px rgba(0,0,0,.4);backdrop-filter:blur(15px);}
-.nav button{color:var(--muted);background:transparent;padding:8px 3px;border-radius:15px;font-size:10px;}
+
+/* NEW: Transaction summary */
+.tx-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;
+}
+.tx-summary-item{
+  padding:11px;border-radius:12px;text-align:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.08);
+  border-top-color:rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 3px 8px rgba(0,0,0,.18);
+}
+.tx-summary-item small{display:block;color:var(--muted);font-size:10px;margin-bottom:4px;}
+.tx-summary-item b{font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.4);}
+
+/* ---------- NAV ---------- */
+.nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  max-width:700px;margin:auto;z-index:50;padding:7px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:rgba(8,17,29,.76);
+  backdrop-filter:blur(12px) saturate(150%);
+  -webkit-backdrop-filter:blur(12px) saturate(150%);
+  border:1px solid rgba(255,255,255,.12);
+  border-top-color:rgba(255,255,255,.22);
+  border-bottom-color:rgba(0,0,0,.35);
+  border-radius:22px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 4px 12px rgba(0,0,0,.35),
+    0 14px 34px rgba(0,0,0,.45);
+  transform:translateZ(0);}
+.nav button{color:var(--muted);background:transparent;padding:8px 3px;border-radius:15px;font-size:10px;text-shadow:0 1px 2px rgba(0,0,0,.35);}
 .nav button span{display:block;font-size:19px;margin-bottom:2px;}
-.nav button.active{color:var(--text);background:rgba(84,169,255,.13);}
-.modal{position:fixed;inset:0;z-index:100;display:none;background:rgba(0,0,0,.58);padding:15px;align-items:flex-end;}
-.modal.show{display:flex;}
-.modal-box{width:min(650px,100%);max-height:92vh;overflow:auto;margin:auto auto 0;padding:18px;border-radius:25px 25px 18px 18px;background:#0b1929;border:1px solid var(--line);}
+.nav button.active{color:var(--text);background:linear-gradient(180deg,rgba(84,169,255,.24),rgba(84,169,255,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 2px 6px rgba(84,169,255,.20);}
+
+/* ---------- MODAL ---------- */
+.modal{position:fixed;inset:0;z-index:100;display:none;padding:15px;align-items:flex-end;
+  background:rgba(2,6,12,.5);}
+.modal.show{display:flex;animation:modalFade .2s ease;}
+.modal.show::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.modal-box{width:min(650px,100%);max-height:92vh;overflow:auto;margin:auto auto 0;padding:18px;
+  border-radius:28px 28px 20px 20px;position:relative;z-index:1;
+  background:linear-gradient(180deg,rgba(26,42,64,.98),rgba(13,24,39,.98));
+  border:1px solid rgba(255,255,255,.12);
+  border-top-color:rgba(255,255,255,.24);
+  border-bottom-color:rgba(0,0,0,.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 -12px 50px rgba(0,0,0,.55),
+    0 -4px 12px rgba(0,0,0,.30);
+  animation:modalUp .3s cubic-bezier(.22,1,.36,1);}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px;}
 .modal-head h2{margin:0;font-size:18px;}
-.close{width:35px;height:35px;border-radius:12px;color:white;background:rgba(255,255,255,.07);}
+.close{width:35px;height:35px;border-radius:12px;color:white;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.11);border-top-color:rgba(255,255,255,.18);}
+
 .empty{text-align:center;padding:30px 10px;color:var(--muted);}
-.toast{position:fixed;left:50%;bottom:calc(85px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(15px);z-index:200;
-  background:#13243a;border:1px solid var(--line);border-radius:13px;padding:11px 15px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.setting{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px 0;border-bottom:1px solid var(--line);}
+
+.toast{position:fixed;left:50%;bottom:calc(85px + env(safe-area-inset-bottom,0px));
+  transform:translate3d(-50%,15px,0);z-index:200;
+  background:linear-gradient(180deg,rgba(30,50,76,.96),rgba(20,36,58,.96));
+  border:1px solid rgba(255,255,255,.14);
+  border-top-color:rgba(255,255,255,.24);
+  border-radius:14px;
+  padding:11px 15px;font-size:12px;opacity:0;pointer-events:none;
+  transition:opacity .22s,transform .28s cubic-bezier(.22,1,.36,1);
+  white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 26px rgba(0,0,0,.42);
+  text-shadow:0 1px 2px rgba(0,0,0,.4);}
+.toast.show{opacity:1;transform:translate3d(-50%,0,0);}
+
+.setting{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.09);}
 .setting:last-child{border-bottom:0;}
 .setting b{display:block;margin-bottom:3px;}
 .setting small{color:var(--muted);}
+
 .smart-date-wrap{position:relative;}
 .smart-date{display:flex;gap:6px;}
 .dtext{flex:1;}
-.dtbtn{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.075);border:1px solid var(--line);color:var(--text);white-space:nowrap;}
+.dtbtn{padding:10px 12px;border-radius:12px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.11);
+  border-top-color:rgba(255,255,255,.18);
+  color:var(--text);white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);}
 .dtpick{position:absolute;left:0;top:0;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none;}
+
 .search-wrap{position:relative;margin-bottom:12px;}
 .search-wrap input{padding-left:38px;padding-right:38px;}
 .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;}
-.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;
-  background:rgba(255,255,255,.09);color:var(--muted);font-size:13px;display:none;place-items:center;padding:0;min-height:auto;}
+.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));
+  color:var(--muted);border:1px solid rgba(255,255,255,.10);
+  font-size:13px;display:none;place-items:center;padding:0;min-height:auto;}
 .search-clear.show{display:grid;}
+
 @media(min-width:700px){
   .stats{grid-template-columns:repeat(4,1fr);}
   .quick-grid{grid-template-columns:repeat(4,1fr);}
   .modal{align-items:center;}
-  .modal-box{margin:auto;border-radius:25px;}
+  .modal-box{margin:auto;border-radius:28px;}
   .market-money{grid-template-columns:repeat(4,1fr);}
 }
-@keyframes pageIn{from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none}}
+
+@keyframes pageIn{from{opacity:0;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+@keyframes modalUp{from{opacity:0;transform:translate3d(0,20px,0) scale(.98)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translate3d(0,-6px,0) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---------- LOW-DEVICE / REDUCE EFFECTS ---------- */
+html.reduce-effects .nav{backdrop-filter:none !important;-webkit-backdrop-filter:none !important;background:rgba(8,17,29,.94);}
+html.reduce-effects .modal.show::before{backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
+html.reduce-effects .modal.show{background:rgba(2,6,12,.82);}
+html.reduce-effects .member,
+html.reduce-effects .market-row,
+html.reduce-effects .glass{box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 4px 12px rgba(0,0,0,.22);}
+html.reduce-effects h1,html.reduce-effects h2,html.reduce-effects h3,
+html.reduce-effects .stat .value,html.reduce-effects .money-box b,
+html.reduce-effects .member-balance b,html.reduce-effects .badge,
+html.reduce-effects .small,html.reduce-effects .muted{text-shadow:none;}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
 </style>
 </head>
 <body>
@@ -146,9 +477,11 @@ th{color:var(--muted);}
 <header class="header">
   <div class="brand">
     <div class="logo">🍱</div>
-    <div><h1>Mess Manager Pro</h1><small>Smart Mess Accounting V12 · <span id="todayText"></span></small></div>
+    <div><h1>Mess Manager Pro By Ashik</h1><small>Smart Mess Accounting V999+ · <span id="todayText"></span></small></div>
   </div>
   <div class="hgroup">
+    <button class="icon-btn" id="undoBtn" onclick="undo()" title="Undo (Ctrl+Z)">↶</button>
+    <button class="icon-btn" id="redoBtn" onclick="redo()" title="Redo (Ctrl+Y)">↷</button>
     <button class="range-chip" onclick="openModal('rangeModal')">📅 <span id="rangeChipText">সার্বিক</span></button>
     <div class="live"><i></i>LIVE</div>
   </div>
@@ -156,7 +489,6 @@ th{color:var(--muted);}
 
 <!-- HOME -->
 <section id="home" class="page active">
-
   <div class="card glass">
     <div class="card-title"><h2>🏦 সার্বিক সংগ্রহ ও খরচ</h2><span class="badge">সব সময়ের হিসাব</span></div>
     <div class="stats" style="margin:0">
@@ -177,9 +509,7 @@ th{color:var(--muted);}
       <div class="flow-row"><span>দোকানদারকে দেওয়া</span><b id="cashPaidShop" class="red-text">৳0</b></div>
       <div class="flow-row"><span>মোট Member Charge</span><b id="cashCharges" class="orange-text">৳0</b></div>
       <div class="flow-row"><span>মোট Member Refund</span><b id="cashRefunds" class="purple-text">৳0</b></div>
-      <div class="flow-row highlight">
-        <span><b>✅ হাতে অবশিষ্ট টাকা</b></span><b id="cashRemaining" class="cyan-text" style="font-size:16px">৳0</b>
-      </div>
+      <div class="flow-row highlight"><span><b>✅ হাতে অবশিষ্ট টাকা</b></span><b id="cashRemaining" class="cyan-text" style="font-size:16px">৳0</b></div>
     </div>
     <div class="small muted" style="margin-top:8px">সূত্র: মোট উত্তোলন − দোকানে দেওয়া − মোট চার্জ − মোট Refund</div>
   </div>
@@ -230,7 +560,6 @@ th{color:var(--muted);}
     <div class="card-title"><h2>📋 বাকি / পাওনা তালিকা</h2><span class="badge range-badge">সার্বিক</span></div>
     <div id="dueList"></div>
   </div>
-
 </section>
 
 <!-- MEMBERS -->
@@ -293,7 +622,12 @@ th{color:var(--muted);}
     <div class="table-wrap"><table><thead><tr><th>Date</th><th>Purchase</th><th>Paid</th><th>Due</th></tr></thead><tbody id="marketReport"></tbody></table></div>
   </div>
   <div class="card glass">
-    <div class="card-title"><h2>💵 Transaction History</h2></div>
+    <div class="card-title"><h2>💵 Transaction History</h2><span class="badge cyan">Real-time</span></div>
+    <div class="tx-summary">
+      <div class="tx-summary-item"><small>মোট জমা</small><b id="txDepositTotal" class="green-text">৳0</b></div>
+      <div class="tx-summary-item"><small>মোট চার্জ</small><b id="txChargeTotal" class="purple-text">৳0</b></div>
+      <div class="tx-summary-item"><small>মোট Refund</small><b id="txRefundTotal" class="orange-text">৳0</b></div>
+    </div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input id="depositSearch" type="search" placeholder="Member খুঁজো..." oninput="onDepositSearch()">
@@ -307,21 +641,27 @@ th{color:var(--muted);}
 <section id="settings" class="page">
   <div class="card glass">
     <div class="card-title"><h2>⚙️ Settings & Backup</h2></div>
+    <div class="setting"><div><b>↩️ Undo / ↪️ Redo</b><small>সর্বশেষ পরিবর্তন ফিরিয়ে আনো / আবার করো</small></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn" id="undoBtnSettings" onclick="undo()">↶</button>
+        <button class="btn" id="redoBtnSettings" onclick="redo()">↷</button>
+      </div>
+    </div>
+    <div class="setting"><div><b>⚡ Performance Mode</b><small id="perfModeStatus">Auto (best for your device)</small></div><button class="btn primary" onclick="togglePerfMode()">Toggle</button></div>
     <div class="setting"><div><b>📅 সময়কাল পরিবর্তন</b><small>All Time / আজ / এই মাস / কাস্টম</small></div><button class="btn primary" onclick="openModal('rangeModal')">Change</button></div>
     <div class="setting"><div><b>⬇️ Download Backup</b><small>সম্পূর্ণ JSON backup</small></div><button class="btn primary" onclick="downloadBackup()">Download</button></div>
     <div class="setting"><div><b>♻️ Restore</b><small>Backup থেকে data ফেরত</small></div><button class="btn purple" onclick="restoreBackup()">Restore</button></div>
-    <div class="setting"><div><b>🗑️ Clear All Data</b><small>সব member, meal, deposit, charge, refund ও market data মুছে দেবে</small></div><button class="btn red" onclick="clearAllData()">Clear</button></div>
+    <div class="setting"><div><b>🗑️ Clear All Data</b><small>সব data মুছে দেবে</small></div><button class="btn red" onclick="clearAllData()">Clear</button></div>
   </div>
   <div class="card glass">
     <div class="card-title"><h2>ℹ️ হিসাবের নিয়ম</h2></div>
     <p class="small muted">Breakfast = 0.5 Meal · Lunch = 1 Meal · Dinner = 0.5 Meal</p>
     <p class="small muted">📝 Custom Meal = সরাসরি যত মিল লিখবেন, ঠিক তত মিল</p>
+    <p class="small muted">🛒 Market-এ প্রতিটি আইটেমের দাম দিলে real-time auto total হবে</p>
     <p class="small muted">Meal Rate = নির্বাচিত সময়কালে মোট বাজার ÷ মোট Meal</p>
     <p class="small muted">Member Food Cost = Member Meal × Meal Rate</p>
     <p class="small muted">Member Balance = Deposit − Food Cost − Charges − Refund</p>
-    <p class="small muted">হাতে অবশিষ্ট টাকা = মোট উত্তোলন − দোকানদারকে দেওয়া − মোট Member Charge − মোট Refund</p>
-    <p class="small muted">কোনো member-এর কাছে টাকা পাওনা থাকলে (Balance &gt; 0) তাকে Refund দেওয়া যাবে। Refund দিলে Balance কমবে।</p>
-    <p class="small muted">"সার্বিক সংগ্রহ ও খরচ" এবং "Real-time Cash Position" কার্ড সবসময় শুরু থেকে এখন পর্যন্ত সব হিসাব দেখায়।</p>
+    <p class="small muted">✎ যেকোনো entry-তে এডিট বাটনে চাপ দিয়ে সংশোধন করা যাবে।</p>
   </div>
 </section>
 
@@ -335,7 +675,7 @@ th{color:var(--muted);}
   <button data-page="settings" onclick="showPage('settings',this)"><span>⚙️</span>Settings</button>
 </nav>
 
-<!-- MEMBER MODAL -->
+<!-- MEMBER ADD MODAL -->
 <div id="memberModal" class="modal" onclick="modalBackground(event,'memberModal')">
   <div class="modal-box">
     <div class="modal-head"><h2>👤 Add Member</h2><button class="close" onclick="closeModal('memberModal')">✕</button></div>
@@ -344,10 +684,19 @@ th{color:var(--muted);}
   </div>
 </div>
 
+<!-- MEMBER EDIT MODAL -->
+<div id="memberEditModal" class="modal" onclick="modalBackground(event,'memberEditModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>✎ Edit Member</h2><button class="close" onclick="closeModal('memberEditModal')">✕</button></div>
+    <div class="form-group"><label>Member Name</label><input id="memberEditName"></div>
+    <button class="btn green full" onclick="saveMemberEdit()">Save Changes</button>
+  </div>
+</div>
+
 <!-- MEAL MODAL -->
 <div id="mealModal" class="modal" onclick="modalBackground(event,'mealModal')">
   <div class="modal-box">
-    <div class="modal-head"><h2>🍛 Add Meal</h2><button class="close" onclick="closeModal('mealModal')">✕</button></div>
+    <div class="modal-head"><h2 id="mealModalTitle">🍛 Add Meal</h2><button class="close" onclick="closeModal('mealModal')">✕</button></div>
     <div class="form-group">
       <label>Date</label>
       <div class="smart-date-wrap">
@@ -378,13 +727,10 @@ th{color:var(--muted);}
     <div class="form-group">
       <label>📝 সরাসরি মিল সংখ্যা (ঐচ্ছিক)</label>
       <input id="mealCustom" type="number" min="0" step="0.5" inputmode="decimal" placeholder="যেমন: 10 / 5 / 2.5">
-      <div class="small muted" style="margin-top:5px">খাতার সাথে মিলাতে সরাসরি মিল সংখ্যা লেখো (যেমন একসাথে 10 মিল)</div>
+      <div class="small muted" style="margin-top:5px">খাতার সাথে মিলাতে সরাসরি মিল সংখ্যা লেখো</div>
     </div>
-    <div class="form-group">
-      <label>⚡ Member Charge (ঐচ্ছিক)</label>
-      <input id="mealCharge" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0">
-    </div>
-    <button class="btn green full" onclick="addMeal()">Save Meal</button>
+    <div class="form-group"><label>⚡ Member Charge (ঐচ্ছিক)</label><input id="mealCharge" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0"></div>
+    <button class="btn green full" id="mealSaveBtn" onclick="addMeal()">Save Meal</button>
   </div>
 </div>
 
@@ -417,6 +763,27 @@ th{color:var(--muted);}
   </div>
 </div>
 
+<!-- DEPOSIT EDIT MODAL -->
+<div id="depositEditModal" class="modal" onclick="modalBackground(event,'depositEditModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>✎ Edit Deposit</h2><button class="close" onclick="closeModal('depositEditModal')">✕</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="depositEditDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('depositEditDatePick')">📅</button>
+        </div>
+        <input type="date" id="depositEditDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>Member</label><select id="depositEditMember"></select></div>
+    <div class="form-group"><label>Amount (জমা)</label><input id="depositEditAmount" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="form-group"><label>⚡ Member Charge (ঐচ্ছিক)</label><input id="depositEditCharge" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <button class="btn green full" onclick="saveDepositEdit()">Save Changes</button>
+  </div>
+</div>
+
 <!-- CHARGE MODAL -->
 <div id="chargeModal" class="modal" onclick="modalBackground(event,'chargeModal')">
   <div class="modal-box">
@@ -434,8 +801,29 @@ th{color:var(--muted);}
       </div>
     </div>
     <div class="form-group"><label>Charge Amount</label><input id="chargeAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="50"></div>
-    <div class="form-group"><label>কারণ (ঐচ্ছিক)</label><input id="chargeReason" placeholder="যেমন: অতিরিক্ত খাবার / অন্যান্য"></div>
+    <div class="form-group"><label>কারণ (ঐচ্ছিক)</label><input id="chargeReason" placeholder="যেমন: অতিরিক্ত খাবার"></div>
     <button class="btn green full" onclick="saveCharge()">Save Charge</button>
+  </div>
+</div>
+
+<!-- CHARGE EDIT MODAL -->
+<div id="chargeEditModal" class="modal" onclick="modalBackground(event,'chargeEditModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>✎ Edit Charge</h2><button class="close" onclick="closeModal('chargeEditModal')">✕</button></div>
+    <div class="form-group"><label>Member</label><input id="chargeEditMemberName" readonly></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="chargeEditDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('chargeEditDatePick')">📅</button>
+        </div>
+        <input type="date" id="chargeEditDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>Charge Amount</label><input id="chargeEditAmount" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="form-group"><label>কারণ (ঐচ্ছিক)</label><input id="chargeEditReason"></div>
+    <button class="btn green full" onclick="saveChargeEdit()">Save Changes</button>
   </div>
 </div>
 
@@ -444,16 +832,12 @@ th{color:var(--muted);}
   <div class="modal-box">
     <div class="modal-head"><h2>💸 Member Refund</h2><button class="close" onclick="closeModal('refundModal')">✕</button></div>
     <div class="form-group"><label>Member</label><input id="refundMemberName" readonly></div>
-
     <div class="card glass" style="padding:12px;margin-bottom:13px">
       <div class="flow-row"><span>মোট পাওনা (মেম্বারের)</span><b id="refundTotalDue" class="green-text">৳0</b></div>
       <div class="flow-row" style="margin-top:7px"><span>আগে ফেরত দেওয়া হয়েছে</span><b id="refundAlreadyGiven" class="orange-text">৳0</b></div>
       <div class="flow-row" style="margin-top:7px"><span>এখনও বাকি (দিতে হবে)</span><b id="refundRemaining" class="cyan-text">৳0</b></div>
-      <div class="flow-row highlight" style="margin-top:7px">
-        <span><b>এই Refund-এর পরে বাকি থাকবে</b></span><b id="refundAfter" class="purple-text">৳0</b>
-      </div>
+      <div class="flow-row highlight" style="margin-top:7px"><span><b>এই Refund-এর পরে বাকি থাকবে</b></span><b id="refundAfter" class="purple-text">৳0</b></div>
     </div>
-
     <div class="form-group">
       <label>Date</label>
       <div class="smart-date-wrap">
@@ -475,10 +859,31 @@ th{color:var(--muted);}
   </div>
 </div>
 
-<!-- MARKET MODAL -->
+<!-- REFUND EDIT MODAL -->
+<div id="refundEditModal" class="modal" onclick="modalBackground(event,'refundEditModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>✎ Edit Refund</h2><button class="close" onclick="closeModal('refundEditModal')">✕</button></div>
+    <div class="form-group"><label>Member</label><input id="refundEditMemberName" readonly></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="refundEditDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('refundEditDatePick')">📅</button>
+        </div>
+        <input type="date" id="refundEditDatePick" class="dtpick">
+      </div>
+    </div>
+    <div class="form-group"><label>Amount</label><input id="refundEditAmount" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="form-group"><label>নোট</label><input id="refundEditNote"></div>
+    <button class="btn green full" onclick="saveRefundEdit()">Save Changes</button>
+  </div>
+</div>
+
+<!-- MARKET MODAL (with ITEMS) -->
 <div id="marketModal" class="modal" onclick="modalBackground(event,'marketModal')">
   <div class="modal-box">
-    <div class="modal-head"><h2>🛒 Market</h2><button class="close" onclick="closeModal('marketModal')">✕</button></div>
+    <div class="modal-head"><h2>🛒 Add Market</h2><button class="close" onclick="closeModal('marketModal')">✕</button></div>
     <div class="form-group">
       <label>Date</label>
       <div class="smart-date-wrap">
@@ -490,6 +895,18 @@ th{color:var(--muted);}
         <input type="date" id="marketDatePick" class="dtpick">
       </div>
     </div>
+
+    <!-- NEW: Items section -->
+    <div class="form-group">
+      <label>📦 বাজারের আইটেম তালিকা</label>
+      <div id="marketItems" class="market-items-container"></div>
+      <button type="button" class="btn full" onclick="addMarketItemRow('marketItems')">+ নতুন আইটেম যোগ কর</button>
+      <div class="market-items-total" style="margin-top:10px">
+        <span>মোট আইটেম মূল্য</span>
+        <b id="marketItemsTotal">৳0</b>
+      </div>
+    </div>
+
     <div class="form-group"><label>মোট বাজার</label><input id="marketPurchase" type="number" min="0" step="0.01" inputmode="decimal" placeholder="2000"></div>
     <div class="form-group"><label>দোকানদারকে দেওয়া</label><input id="marketPaid" type="number" min="0" step="0.01" inputmode="decimal" placeholder="1500"></div>
     <div class="card glass" style="padding:12px;margin-bottom:13px">
@@ -497,6 +914,38 @@ th{color:var(--muted);}
       <div class="flow-row" style="margin-top:7px"><span>মোট বাকি (সার্বিক)</span><b id="marketTotalDue" class="orange-text">৳0</b></div>
     </div>
     <button class="btn green full" onclick="addMarket()">Save Market</button>
+  </div>
+</div>
+
+<!-- MARKET EDIT MODAL (with ITEMS) -->
+<div id="marketEditModal" class="modal" onclick="modalBackground(event,'marketEditModal')">
+  <div class="modal-box">
+    <div class="modal-head"><h2>✎ Edit Market</h2><button class="close" onclick="closeModal('marketEditModal')">✕</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <div class="smart-date-wrap">
+        <div class="smart-date">
+          <input type="text" id="marketEditDateText" class="dtext" placeholder="DD-MM-YYYY" inputmode="numeric">
+          <button type="button" class="dtbtn" onclick="showPickerFor('marketEditDatePick')">📅</button>
+        </div>
+        <input type="date" id="marketEditDatePick" class="dtpick">
+      </div>
+    </div>
+
+    <!-- Items section -->
+    <div class="form-group">
+      <label>📦 বাজারের আইটেম তালিকা</label>
+      <div id="marketEditItems" class="market-items-container"></div>
+      <button type="button" class="btn full" onclick="addMarketItemRow('marketEditItems')">+ নতুন আইটেম যোগ কর</button>
+      <div class="market-items-total" style="margin-top:10px">
+        <span>মোট আইটেম মূল্য</span>
+        <b id="marketEditItemsTotal">৳0</b>
+      </div>
+    </div>
+
+    <div class="form-group"><label>মোট বাজার</label><input id="marketEditPurchase" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <div class="form-group"><label>দোকানদারকে দেওয়া</label><input id="marketEditPaid" type="number" min="0" step="0.01" inputmode="decimal"></div>
+    <button class="btn green full" onclick="saveMarketEdit()">Save Changes</button>
   </div>
 </div>
 
@@ -565,8 +1014,11 @@ th{color:var(--muted);}
 "use strict";
 
 /* ============ DATABASE ============ */
-const DB_KEY="mess_manager_pro_v12";
-let data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+const DB_KEY="mess_manager_pro_v15";
+const OLD_KEYS=["mess_manager_pro_v14","mess_manager_pro_v13","mess_manager_pro_v12","mess_manager_pro_v11","mess_manager_pro_v10","mess_manager_pro_v9","mess_manager_pro_v8","mess_manager_pro_v7"];
+const PERF_KEY="mess_perf_mode_v15";
+
+let data={version:15,members:[],meals:[],deposits:[],market:[],refunds:[]};
 let entryDate=today();
 let range={mode:"all",from:null,to:null};
 let activeMember=null;
@@ -575,6 +1027,86 @@ let refundingMemberId=null;
 let memberSearchTerm="";
 let reportSearchTerm="";
 let depositSearchTerm="";
+let editing={meal:null,deposit:null,charge:null,refund:null,market:null,member:null};
+
+/* ============ HISTORY (UNDO/REDO) ============ */
+const MAX_HISTORY=60;
+let history=[],historyIndex=-1;
+function snapshot(){ return JSON.parse(JSON.stringify(data)); }
+function commit(){
+  history=history.slice(0,historyIndex+1);
+  history.push(snapshot());
+  if(history.length>MAX_HISTORY) history.shift();
+  historyIndex=history.length-1;
+  saveData(); renderAll(); updateHistoryButtons();
+}
+function undo(){
+  if(historyIndex<=0) return;
+  historyIndex--;
+  data=JSON.parse(JSON.stringify(history[historyIndex]));
+  saveData(); renderAll(); updateHistoryButtons();
+  showToast("↶ Undo");
+}
+function redo(){
+  if(historyIndex>=history.length-1) return;
+  historyIndex++;
+  data=JSON.parse(JSON.stringify(history[historyIndex]));
+  saveData(); renderAll(); updateHistoryButtons();
+  showToast("↷ Redo");
+}
+function updateHistoryButtons(){
+  const u1=document.getElementById("undoBtn"), r1=document.getElementById("redoBtn");
+  const u2=document.getElementById("undoBtnSettings"), r2=document.getElementById("redoBtnSettings");
+  const uDisabled=historyIndex<=0, rDisabled=historyIndex>=history.length-1;
+  [u1,u2].forEach(b=>{ if(b) b.disabled=uDisabled; });
+  [r1,r2].forEach(b=>{ if(b) b.disabled=rDisabled; });
+}
+
+/* ============ PERF MODE ============ */
+function getPerfMode(){ return localStorage.getItem(PERF_KEY)||"auto"; }
+function applyPerfMode(){
+  const mode=getPerfMode();
+  const html=document.documentElement;
+  if(mode==="on"){ html.classList.add("reduce-effects"); }
+  else if(mode==="off"){ html.classList.remove("reduce-effects"); }
+  const el=document.getElementById("perfModeStatus");
+  if(el) el.textContent = mode==="on" ? "বন্ধ (সর্বোচ্চ পারফরম্যান্স)"
+                       : mode==="off" ? "চালু (পূর্ণ লিকুইড গ্লাস)"
+                       : "Auto (device অনুযায়ী)";
+}
+function togglePerfMode(){
+  const cur=getPerfMode();
+  const next = cur==="auto" ? "off" : cur==="off" ? "on" : "auto";
+  localStorage.setItem(PERF_KEY,next);
+  if(next==="auto"){
+    document.documentElement.classList.remove("reduce-effects");
+    startFpsProbe();
+  } else {
+    applyPerfMode();
+  }
+  showToast("⚡ Perf: "+next);
+}
+
+let fpsProbeRunning=false;
+function startFpsProbe(){
+  if(fpsProbeRunning) return;
+  fpsProbeRunning=true;
+  if(getPerfMode()!=="auto"){ fpsProbeRunning=false; return; }
+  let frames=0, start=performance.now();
+  function tick(now){
+    frames++;
+    const elapsed=now-start;
+    if(elapsed>=2000){
+      const fps=frames*1000/elapsed;
+      if(fps<55) document.documentElement.classList.add("reduce-effects");
+      else document.documentElement.classList.remove("reduce-effects");
+      fpsProbeRunning=false;
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 /* ============ DATE HELPERS ============ */
 function pad(n){return String(n).padStart(2,"0");}
@@ -583,8 +1115,7 @@ function today(){return localDateString(new Date());}
 function formatDate(iso){ if(!iso) return "-"; const p=iso.split("-"); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:iso; }
 function isoToDMY(iso){ if(!iso) return ""; const p=iso.split("-"); return p.length===3?`${p[2]}-${p[1]}-${p[0]}`:""; }
 function dmyToISO(str){
-  if(!str) return null;
-  str=str.trim();
+  if(!str) return null; str=str.trim();
   let m=str.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
   if(m) return `${m[3]}-${pad(+m[2])}-${pad(+m[1])}`;
   m=str.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/);
@@ -596,16 +1127,14 @@ function normalizeText(s){ return String(s||"").toLowerCase().trim(); }
 
 /* ============ SMART DATE INPUTS ============ */
 function setSmartDateValue(prefix,iso){
-  const t=document.getElementById(prefix+"Text");
-  const p=document.getElementById(prefix+"Pick");
+  const t=document.getElementById(prefix+"Text"), p=document.getElementById(prefix+"Pick");
   if(t) t.value=isoToDMY(iso);
   if(p) p.value=iso||"";
 }
 function getSmartDateValue(prefix){
   const t=document.getElementById(prefix+"Text").value.trim();
-  const iso=dmyToISO(t);
-  if(iso) return iso;
-  return document.getElementById(prefix+"Pick").value || null;
+  const iso=dmyToISO(t); if(iso) return iso;
+  return document.getElementById(prefix+"Pick").value||null;
 }
 function showPickerFor(id){
   const el=document.getElementById(id);
@@ -634,16 +1163,17 @@ function saveData(){
   catch(err){ console.error(err); showToast("⚠️ Storage full"); }
 }
 function normalizeData(obj){
-  const clean={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+  const clean={version:15,members:[],meals:[],deposits:[],market:[],refunds:[]};
   if(!obj||typeof obj!=="object") return clean;
   if(Array.isArray(obj.members)) clean.members=obj.members;
-  if(Array.isArray(obj.meals)) clean.meals=obj.meals.map(m=>({
-    ...m,
-    charge:Number(m.charge)||0,
-    customMeal:Number(m.customMeal)||0
-  }));
+  if(Array.isArray(obj.meals)) clean.meals=obj.meals.map(m=>({...m,charge:Number(m.charge)||0,customMeal:Number(m.customMeal)||0}));
   if(Array.isArray(obj.deposits)) clean.deposits=obj.deposits.map(d=>({...d,charge:Number(d.charge)||0}));
-  if(Array.isArray(obj.market)) clean.market=obj.market;
+  if(Array.isArray(obj.market)) clean.market=obj.market.map(m=>({
+    ...m,
+    purchase:Number(m.purchase)||0,
+    paid:Number(m.paid)||0,
+    items:Array.isArray(m.items)?m.items.map(it=>({name:String(it.name||""),price:Number(it.price)||0})):[]
+  }));
   if(Array.isArray(obj.refunds)) clean.refunds=obj.refunds.map(r=>({...r,amount:Number(r.amount)||0}));
   return clean;
 }
@@ -651,21 +1181,18 @@ function loadData(){
   try{
     const raw=localStorage.getItem(DB_KEY);
     if(raw){ data=normalizeData(JSON.parse(raw)); return; }
-    const v11=localStorage.getItem("mess_manager_pro_v11");
-    if(v11){ data=normalizeData(JSON.parse(v11)); saveData(); return; }
-    const v10=localStorage.getItem("mess_manager_pro_v10");
-    if(v10){ data=normalizeData(JSON.parse(v10)); saveData(); return; }
-    const v9=localStorage.getItem("mess_manager_pro_v9");
-    if(v9){ data=normalizeData(JSON.parse(v9)); saveData(); return; }
-    const v8=localStorage.getItem("mess_manager_pro_v8");
-    if(v8){ data=normalizeData(JSON.parse(v8)); saveData(); return; }
-    const v7=localStorage.getItem("mess_manager_pro_v7");
-    if(v7){ migrateV7(JSON.parse(v7)); saveData(); return; }
+    for(const key of OLD_KEYS){
+      const v=localStorage.getItem(key);
+      if(v){
+        if(key==="mess_manager_pro_v7"){ migrateV7(JSON.parse(v)); saveData(); return; }
+        data=normalizeData(JSON.parse(v)); saveData(); return;
+      }
+    }
   }catch(err){ console.error(err); }
-  data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
+  data={version:15,members:[],meals:[],deposits:[],market:[],refunds:[]};
 }
 function migrateV7(old){
-  data={version:12,members:Array.isArray(old.members)?old.members:[],meals:[],deposits:[],market:[],refunds:[]};
+  data={version:15,members:Array.isArray(old.members)?old.members:[],meals:[],deposits:[],market:[],refunds:[]};
   if(!old.weeks) return;
   Object.entries(old.weeks).forEach(([weekDate,w])=>{
     if(!w) return;
@@ -678,7 +1205,7 @@ function migrateV7(old){
       list.forEach(p=>data.deposits.push({id:p.id||uid(),memberId,date:p.date||weekDate,amount:Number(p.amount)||0,charge:0,createdAt:p.createdAt||new Date().toISOString()}));
     });
     if(Array.isArray(w.market)) w.market.forEach(m=>{
-      data.market.push({id:m.id||uid(),date:m.date||weekDate,purchase:Number(m.purchase)||0,paid:Number(m.paid)||0,createdAt:m.createdAt||new Date().toISOString()});
+      data.market.push({id:m.id||uid(),date:m.date||weekDate,purchase:Number(m.purchase)||0,paid:Number(m.paid)||0,items:[],createdAt:m.createdAt||new Date().toISOString()});
     });
   });
 }
@@ -749,10 +1276,7 @@ function filterMemberSelect(searchInputId,selectId){
   const select=document.getElementById(selectId);
   const currentVal=select.value;
   const filtered=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
-  if(!filtered.length){
-    select.innerHTML=`<option value="">কোনো member পাওয়া যায়নি</option>`;
-    return;
-  }
+  if(!filtered.length){ select.innerHTML=`<option value="">কোনো member পাওয়া যায়নি</option>`; return; }
   select.innerHTML=filtered.map(m=>`<option value="${m.id}">${escapeHTML(m.name)}</option>`).join("");
   if(filtered.some(m=>m.id===currentVal)) select.value=currentVal;
 }
@@ -799,8 +1323,7 @@ function finishRangeSet(){
   showToast("📅 "+rangeLabelText());
 }
 
-/* ============ CALC (range-based) ============ */
-/* mealValue now accepts either a meal object or a type string (backward compatible) */
+/* ============ CALC ============ */
 function mealValue(meal){
   if(meal && typeof meal === "object"){
     if(meal.type==="Custom") return Number(meal.customMeal)||0;
@@ -809,7 +1332,6 @@ function mealValue(meal){
     if(meal.type==="Dinner") return .5;
     return 0;
   }
-  // string type
   if(meal==="Breakfast") return .5;
   if(meal==="Lunch") return 1;
   if(meal==="Dinner") return .5;
@@ -830,29 +1352,22 @@ function memberMeals(id){ return mealsIn(id).reduce((s,m)=>s+mealValue(m),0); }
 function memberFoodCost(id){ return memberMeals(id)*mealRate(); }
 function memberPaid(id){ return depositsIn(id).reduce((s,d)=>s+Number(d.amount||0),0); }
 function memberRefunded(id){ return refundsIn(id).reduce((s,r)=>s+Number(r.amount||0),0); }
-
-/* Charges (range) */
 function chargesIn(memberId=null){
   const mealC = mealsIn(memberId).reduce((s,m)=>s+Number(m.charge||0),0);
   const depC = depositsIn(memberId).reduce((s,d)=>s+Number(d.charge||0),0);
   return mealC + depC;
 }
 function memberCharges(id){ return chargesIn(id); }
-
-/* Charges (all-time) */
 function allCharges(){
   const mealC = data.meals.reduce((s,m)=>s+Number(m.charge||0),0);
   const depC = data.deposits.reduce((s,d)=>s+Number(d.charge||0),0);
   return mealC + depC;
 }
-
-/* Balance */
 function memberBalance(id){ return memberPaid(id)-memberFoodCost(id)-memberCharges(id)-memberRefunded(id); }
 function memberTotalCredit(id){ return memberPaid(id)-memberFoodCost(id)-memberCharges(id); }
 function totalReceive(){ return data.members.reduce((s,m)=>s+Math.max(0,memberBalance(m.id)),0); }
 function totalCollect(){ return data.members.reduce((s,m)=>s+Math.max(0,-memberBalance(m.id)),0); }
 
-/* ============ ALL-TIME (fixed) ============ */
 function allCollected(){ return data.deposits.reduce((s,d)=>s+Number(d.amount||0),0); }
 function allMarket(){ return data.market.reduce((s,m)=>s+Number(m.purchase||0),0); }
 function allPaidShop(){ return data.market.reduce((s,m)=>s+Number(m.paid||0),0); }
@@ -861,9 +1376,13 @@ function allCash(){ return allCollected()-allPaidShop()-allCharges()-allRefunds(
 function allShopDue(){ return Math.max(0,allMarket()-allPaidShop()); }
 
 /* ============ MODALS ============ */
+let topZ=100;
 function openModal(id){
   const modal=document.getElementById(id);
-  if(modal) modal.classList.add("show");
+  if(!modal) return;
+  topZ++;
+  modal.style.zIndex=topZ;
+  modal.classList.add("show");
   document.body.style.overflow="hidden";
   if(id==="rangeModal"){
     document.getElementById("todayLabel").textContent=formatDate(today());
@@ -881,6 +1400,83 @@ function closeModal(id){
 }
 function modalBackground(e,id){ if(e.target.id===id) closeModal(id); }
 
+/* ============ MARKET ITEMS (NEW) ============ */
+function addMarketItemRow(containerId, name="", price=""){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  const row=document.createElement("div");
+  row.className="market-item-row";
+  const nameVal = escapeHTML(String(name||""));
+  const priceVal = price==="" || price===null || price===undefined ? "" : Number(price)||0;
+  row.innerHTML = `
+    <input class="m-item-name" type="text" placeholder="জিনিসের নাম" value="${nameVal}">
+    <input class="m-item-price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="দাম" value="${priceVal}">
+    <button type="button" class="btn icon-mini" title="Remove">✕</button>
+  `;
+  const nameInput = row.querySelector(".m-item-name");
+  const priceInput = row.querySelector(".m-item-price");
+  const removeBtn = row.querySelector("button");
+  const recalc = () => recalcMarketItems(containerId);
+  nameInput.addEventListener("input", recalc);
+  priceInput.addEventListener("input", recalc);
+  removeBtn.addEventListener("click", () => {
+    row.remove();
+    recalcMarketItems(containerId);
+  });
+  box.appendChild(row);
+  recalcMarketItems(containerId);
+}
+function recalcMarketItems(containerId){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  let total=0;
+  box.querySelectorAll(".market-item-row").forEach(r=>{
+    total += Number(r.querySelector(".m-item-price").value)||0;
+  });
+  if(containerId==="marketItems"){
+    const el=document.getElementById("marketItemsTotal");
+    if(el) el.textContent=money(total);
+    const purchaseInput=document.getElementById("marketPurchase");
+    const rows=box.querySelectorAll(".market-item-row");
+    if(rows.length>0 && purchaseInput){
+      purchaseInput.value = total>0 ? total.toFixed(2) : "";
+      updateMarketPreview();
+    }
+  } else if(containerId==="marketEditItems"){
+    const el=document.getElementById("marketEditItemsTotal");
+    if(el) el.textContent=money(total);
+    const purchaseInput=document.getElementById("marketEditPurchase");
+    const rows=box.querySelectorAll(".market-item-row");
+    if(rows.length>0 && purchaseInput){
+      purchaseInput.value = total>0 ? total.toFixed(2) : "";
+    }
+  }
+}
+function getMarketItems(containerId){
+  const box=document.getElementById(containerId);
+  if(!box) return [];
+  const items=[];
+  box.querySelectorAll(".market-item-row").forEach(r=>{
+    const name=r.querySelector(".m-item-name").value.trim();
+    const price=Number(r.querySelector(".m-item-price").value)||0;
+    if(name || price>0) items.push({name, price});
+  });
+  return items;
+}
+function clearMarketItems(containerId){
+  const box=document.getElementById(containerId);
+  if(box) box.innerHTML="";
+}
+function itemsTotal(containerId){
+  const box=document.getElementById(containerId);
+  if(!box) return 0;
+  let t=0;
+  box.querySelectorAll(".market-item-row").forEach(r=>{
+    t += Number(r.querySelector(".m-item-price").value)||0;
+  });
+  return t;
+}
+
 /* ============ MEMBER ============ */
 function openMemberModal(){
   document.getElementById("memberName").value="";
@@ -892,28 +1488,36 @@ function addMember(){
   const name=input.value.trim();
   if(!name){ showToast("⚠️ Member name দে"); return; }
   data.members.push({id:uid(),name,createdAt:new Date().toISOString()});
-  saveData(); closeModal("memberModal"); renderAll();
+  commit(); closeModal("memberModal");
   showToast("✅ "+name+" added");
 }
 function editMember(id){
   const m=data.members.find(x=>x.id===id);
   if(!m) return;
-  const name=prompt("নতুন নাম:",m.name);
-  if(name===null) return;
-  const trimmed=name.trim();
-  if(!trimmed){ showToast("⚠️ নাম দাও"); return; }
-  m.name=trimmed; saveData(); renderAll();
+  editing.member=id;
+  document.getElementById("memberEditName").value=m.name;
+  openModal("memberEditModal");
+  setTimeout(()=>{ const inp=document.getElementById("memberEditName"); inp.focus(); inp.select(); },100);
+}
+function saveMemberEdit(){
+  const m=data.members.find(x=>x.id===editing.member);
+  if(!m) return;
+  const name=document.getElementById("memberEditName").value.trim();
+  if(!name){ showToast("⚠️ নাম দাও"); return; }
+  m.name=name;
+  commit(); closeModal("memberEditModal");
+  editing.member=null;
   showToast("✅ Name updated");
 }
 function deleteMember(id){
   const member=data.members.find(m=>m.id===id);
   if(!member) return;
-  if(!confirm(`"${member.name}" এবং তার সব হিসাব (meal, deposit, charge, refund) delete হবে। Continue?`)) return;
+  if(!confirm(`"${member.name}" এবং তার সব হিসাব delete হবে। Continue?`)) return;
   data.members=data.members.filter(m=>m.id!==id);
   data.meals=data.meals.filter(m=>m.memberId!==id);
   data.deposits=data.deposits.filter(d=>d.memberId!==id);
   data.refunds=data.refunds.filter(r=>r.memberId!==id);
-  saveData(); renderAll();
+  commit();
   showToast("🗑️ Member deleted");
 }
 function fillMemberSelect(id){
@@ -923,15 +1527,46 @@ function fillMemberSelect(id){
 }
 
 /* ============ MEAL ============ */
-function toggleMealType(btn){ btn.classList.toggle("active"); }
+function toggleMealType(btn){
+  if(editing.meal){
+    const wasActive=btn.classList.contains("active");
+    document.querySelectorAll("#mealTypeGroup .meal-btn").forEach(b=>b.classList.remove("active"));
+    if(!wasActive) btn.classList.add("active");
+  } else {
+    btn.classList.toggle("active");
+  }
+}
+function resetMealModal(){
+  editing.meal=null;
+  document.getElementById("mealModalTitle").textContent="🍛 Add Meal";
+  document.getElementById("mealSaveBtn").textContent="Save Meal";
+}
 function openMealModal(){
   if(!data.members.length){ showToast("⚠️ আগে Member add কর"); return; }
+  resetMealModal();
   setSmartDateValue("mealDate",entryDate);
   fillMemberSelect("mealMember");
   document.getElementById("mealMemberSearch").value="";
   document.querySelectorAll("#mealTypeGroup .meal-btn").forEach(b=>b.classList.remove("active"));
   document.getElementById("mealCustom").value="";
   document.getElementById("mealCharge").value="";
+  openModal("mealModal");
+}
+function openMealEditModal(mealId){
+  const meal=data.meals.find(m=>m.id===mealId);
+  if(!meal) return;
+  editing.meal=mealId;
+  document.getElementById("mealModalTitle").textContent="✎ Edit Meal";
+  document.getElementById("mealSaveBtn").textContent="Update Meal";
+  setSmartDateValue("mealDate",meal.date);
+  fillMemberSelect("mealMember");
+  document.getElementById("mealMember").value=meal.memberId;
+  document.getElementById("mealMemberSearch").value="";
+  document.querySelectorAll("#mealTypeGroup .meal-btn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.type===meal.type);
+  });
+  document.getElementById("mealCustom").value = meal.type==="Custom" ? meal.customMeal : "";
+  document.getElementById("mealCharge").value = meal.charge||"";
   openModal("mealModal");
 }
 function addMeal(){
@@ -943,42 +1578,35 @@ function addMeal(){
 
   if(!date){ showToast("⚠️ তারিখ ঠিক করে দাও"); return; }
   if(!memberId){ showToast("⚠️ Member select কর"); return; }
-  if(!types.length && customMeal<=0){
-    showToast("⚠️ Breakfast/Lunch/Dinner select কর অথবা custom মিল সংখ্যা লেখো");
+  if(!types.length && customMeal<=0){ showToast("⚠️ Breakfast/Lunch/Dinner select কর অথবা custom মিল সংখ্যা লেখো"); return; }
+
+  const member=data.members.find(m=>m.id===memberId);
+
+  if(editing.meal){
+    const meal=data.meals.find(m=>m.id===editing.meal);
+    if(!meal){ editing.meal=null; return; }
+    meal.date=date; meal.memberId=memberId;
+    if(customMeal>0){ meal.type="Custom"; meal.customMeal=customMeal; }
+    else { meal.type=types[0]; meal.customMeal=0; }
+    meal.charge=charge;
+    commit(); entryDate=date;
+    closeModal("mealModal"); resetMealModal();
+    showToast(`✅ ${member.name}: ${mealValue(meal)} meal updated${charge>0?` + ${money(charge)} charge`:""}`);
     return;
   }
 
-  const member=data.members.find(m=>m.id===memberId);
   const totalEntries = types.length + (customMeal>0?1:0);
   const chargePerEntry = totalEntries>0 ? charge/totalEntries : 0;
-
-  types.forEach(type=>data.meals.push({
-    id:uid(),memberId,date,type,
-    charge:chargePerEntry,
-    customMeal:0,
-    createdAt:new Date().toISOString()
-  }));
-
+  types.forEach(type=>data.meals.push({id:uid(),memberId,date,type,charge:chargePerEntry,customMeal:0,createdAt:new Date().toISOString()}));
   if(customMeal>0){
-    data.meals.push({
-      id:uid(),memberId,date,type:"Custom",
-      customMeal:customMeal,
-      charge:chargePerEntry,
-      createdAt:new Date().toISOString()
-    });
+    data.meals.push({id:uid(),memberId,date,type:"Custom",customMeal:customMeal,charge:chargePerEntry,createdAt:new Date().toISOString()});
   }
-
-  saveData(); entryDate=date;
-  closeModal("mealModal"); renderAll();
+  commit(); entryDate=date;
+  closeModal("mealModal");
   const totalAdded = types.reduce((s,t)=>s+mealValue(t),0) + customMeal;
   showToast(`🍛 ${member.name}: ${totalAdded} meal${charge>0?` + ${money(charge)} charge`:""} added`);
 }
-function deleteMeal(id){
-  data.meals=data.meals.filter(m=>m.id!==id);
-  saveData(); renderAll();
-  if(activeMember) renderMemberDetail(activeMember);
-  showToast("🗑️ Meal deleted");
-}
+function deleteMeal(id){ data.meals=data.meals.filter(m=>m.id!==id); commit(); showToast("🗑️ Meal deleted"); }
 
 /* ============ DEPOSIT ============ */
 function openDepositModal(memberId=null){
@@ -1000,22 +1628,39 @@ function addDeposit(){
   if(!memberId){ showToast("⚠️ Member select কর"); return; }
   if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
   data.deposits.push({id:uid(),memberId,date,amount,charge,createdAt:new Date().toISOString()});
-  saveData(); entryDate=date;
-  closeModal("depositModal"); renderAll();
+  commit(); entryDate=date;
+  closeModal("depositModal");
   const member=data.members.find(m=>m.id===memberId);
   showToast(`💵 ${member?.name||"Member"}: ${money(amount)}${charge>0?` + ${money(charge)} charge`:""} added`);
 }
-function deleteDeposit(id){
-  data.deposits=data.deposits.filter(d=>d.id!==id);
-  saveData(); renderAll();
-  if(activeMember) renderMemberDetail(activeMember);
-  showToast("🗑️ Deposit deleted");
+function openDepositEditModal(id){
+  const d=data.deposits.find(x=>x.id===id);
+  if(!d) return;
+  editing.deposit=id;
+  setSmartDateValue("depositEditDate",d.date);
+  fillMemberSelect("depositEditMember");
+  document.getElementById("depositEditMember").value=d.memberId;
+  document.getElementById("depositEditAmount").value=Number(d.amount||0);
+  document.getElementById("depositEditCharge").value=Number(d.charge||0);
+  openModal("depositEditModal");
 }
-function fromDetailDeposit(){
-  const id=activeMember;
-  closeModal("detailModal");
-  openDepositModal(id);
+function saveDepositEdit(){
+  const d=data.deposits.find(x=>x.id===editing.deposit);
+  if(!d){ editing.deposit=null; return; }
+  const date=getSmartDateValue("depositEditDate");
+  const memberId=document.getElementById("depositEditMember").value;
+  const amount=Number(document.getElementById("depositEditAmount").value);
+  const charge=Number(document.getElementById("depositEditCharge").value)||0;
+  if(!date){ showToast("⚠️ তারিখ দাও"); return; }
+  if(!memberId){ showToast("⚠️ Member select কর"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+  d.date=date; d.memberId=memberId; d.amount=amount; d.charge=charge;
+  commit(); entryDate=date;
+  closeModal("depositEditModal"); editing.deposit=null;
+  showToast("✅ Deposit updated");
 }
+function deleteDeposit(id){ data.deposits=data.deposits.filter(d=>d.id!==id); commit(); showToast("🗑️ Deleted"); }
+function fromDetailDeposit(){ openDepositModal(activeMember); }
 
 /* ============ CHARGE ============ */
 function openChargeModal(memberId){
@@ -1037,15 +1682,34 @@ function saveCharge(){
   if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
   if(!date){ showToast("⚠️ তারিখ ঠিক কর"); return; }
   if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
-  data.deposits.push({
-    id:uid(), memberId, date,
-    amount:0, charge:amount, reason,
-    isChargeOnly:true,
-    createdAt:new Date().toISOString()
-  });
-  saveData(); entryDate=date;
-  closeModal("chargeModal"); renderAll();
+  data.deposits.push({id:uid(),memberId,date,amount:0,charge:amount,reason,isChargeOnly:true,createdAt:new Date().toISOString()});
+  commit(); entryDate=date;
+  closeModal("chargeModal");
   showToast(`⚡ ${money(amount)} charge added`);
+}
+function openChargeEditModal(id){
+  const d=data.deposits.find(x=>x.id===id);
+  if(!d) return;
+  editing.charge=id;
+  const m=data.members.find(x=>x.id===d.memberId);
+  document.getElementById("chargeEditMemberName").value=m?m.name:"Unknown";
+  setSmartDateValue("chargeEditDate",d.date);
+  document.getElementById("chargeEditAmount").value=Number(d.charge||0);
+  document.getElementById("chargeEditReason").value=d.reason||"";
+  openModal("chargeEditModal");
+}
+function saveChargeEdit(){
+  const d=data.deposits.find(x=>x.id===editing.charge);
+  if(!d){ editing.charge=null; return; }
+  const date=getSmartDateValue("chargeEditDate");
+  const amount=Number(document.getElementById("chargeEditAmount").value);
+  const reason=document.getElementById("chargeEditReason").value.trim();
+  if(!date){ showToast("⚠️ তারিখ দাও"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+  d.date=date; d.charge=amount; d.reason=reason;
+  commit(); entryDate=date;
+  closeModal("chargeEditModal"); editing.charge=null;
+  showToast("✅ Charge updated");
 }
 
 /* ============ REFUND ============ */
@@ -1069,21 +1733,19 @@ function refreshRefundPreview(){
   document.getElementById("refundTotalDue").textContent = money(Math.max(0, totalCredit));
   document.getElementById("refundAlreadyGiven").textContent = money(alreadyRefunded);
   document.getElementById("refundRemaining").textContent = money(Math.max(0, remaining));
-
   const inputAmount = Number(document.getElementById("refundAmount").value)||0;
-  const after = Math.max(0, remaining - inputAmount);
-  document.getElementById("refundAfter").textContent = money(after);
+  document.getElementById("refundAfter").textContent = money(Math.max(0, remaining - inputAmount));
 }
 function fillRefundAll(){
-  const remaining = memberBalance(refundingMemberId);
-  if(remaining <= 0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
-  document.getElementById("refundAmount").value = remaining.toFixed(2);
+  const r=memberBalance(refundingMemberId);
+  if(r<=0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
+  document.getElementById("refundAmount").value = r.toFixed(2);
   refreshRefundPreview();
 }
 function fillRefundHalf(){
-  const remaining = memberBalance(refundingMemberId);
-  if(remaining <= 0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
-  document.getElementById("refundAmount").value = (remaining/2).toFixed(2);
+  const r=memberBalance(refundingMemberId);
+  if(r<=0){ showToast("⚠️ Member-এর কোনো পাওনা নেই"); return; }
+  document.getElementById("refundAmount").value = (r/2).toFixed(2);
   refreshRefundPreview();
 }
 function saveRefund(){
@@ -1094,42 +1756,52 @@ function saveRefund(){
   if(!memberId){ showToast("⚠️ Member পাওয়া যায়নি"); return; }
   if(!date){ showToast("⚠️ তারিখ ঠিক কর"); return; }
   if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
-
   const remaining = memberBalance(memberId);
-  if(remaining <= 0){
-    showToast("⚠️ এই member-এর কোনো পাওনা নেই");
-    return;
-  }
-  if(amount > remaining + 0.009){
-    showToast(`⚠️ Member-এর কাছে মাত্র ${money(remaining)} পাওনা আছে`);
-    return;
-  }
-
-  data.refunds.push({
-    id:uid(), memberId, date, amount, note,
-    createdAt:new Date().toISOString()
-  });
-  saveData(); entryDate=date;
-  closeModal("refundModal"); renderAll();
+  if(remaining <= 0){ showToast("⚠️ এই member-এর কোনো পাওনা নেই"); return; }
+  if(amount > remaining + 0.009){ showToast(`⚠️ Member-এর কাছে মাত্র ${money(remaining)} পাওনা আছে`); return; }
+  data.refunds.push({id:uid(),memberId,date,amount,note,createdAt:new Date().toISOString()});
+  commit(); entryDate=date;
+  closeModal("refundModal");
   const member=data.members.find(m=>m.id===memberId);
   const leftAfter = memberBalance(memberId);
   showToast(`💸 ${member?.name||"Member"}: ${money(amount)} refunded${leftAfter>0.009?` · বাকি ${money(leftAfter)}`:""}`);
 }
-function deleteRefund(id){
-  data.refunds=data.refunds.filter(r=>r.id!==id);
-  saveData(); renderAll();
-  if(activeMember) renderMemberDetail(activeMember);
-  showToast("🗑️ Refund deleted");
+function openRefundEditModal(id){
+  const r=data.refunds.find(x=>x.id===id);
+  if(!r) return;
+  editing.refund=id;
+  const m=data.members.find(x=>x.id===r.memberId);
+  document.getElementById("refundEditMemberName").value=m?m.name:"Unknown";
+  setSmartDateValue("refundEditDate",r.date);
+  document.getElementById("refundEditAmount").value=Number(r.amount||0);
+  document.getElementById("refundEditNote").value=r.note||"";
+  openModal("refundEditModal");
 }
-function fromDetailRefund(){
-  const id=activeMember;
-  closeModal("detailModal");
-  openRefundModal(id);
+function saveRefundEdit(){
+  const r=data.refunds.find(x=>x.id===editing.refund);
+  if(!r){ editing.refund=null; return; }
+  const date=getSmartDateValue("refundEditDate");
+  const amount=Number(document.getElementById("refundEditAmount").value);
+  const note=document.getElementById("refundEditNote").value.trim();
+  if(!date){ showToast("⚠️ তারিখ দাও"); return; }
+  if(!Number.isFinite(amount)||amount<=0){ showToast("⚠️ সঠিক amount দে"); return; }
+  const memberId=r.memberId;
+  const oldAmount=Number(r.amount)||0;
+  const creditAvailable = memberBalance(memberId) + oldAmount;
+  if(amount > creditAvailable + 0.009){ showToast(`⚠️ সর্বোচ্চ ${money(creditAvailable)} refund করা যাবে`); return; }
+  r.date=date; r.amount=amount; r.note=note;
+  commit(); entryDate=date;
+  closeModal("refundEditModal"); editing.refund=null;
+  showToast("✅ Refund updated");
 }
+function deleteRefund(id){ data.refunds=data.refunds.filter(r=>r.id!==id); commit(); showToast("🗑️ Refund deleted"); }
+function fromDetailRefund(){ openRefundModal(activeMember); }
 
 /* ============ MARKET ============ */
 function openMarketModal(){
   setSmartDateValue("marketDate",entryDate);
+  clearMarketItems("marketItems");
+  document.getElementById("marketItemsTotal").textContent="৳0";
   document.getElementById("marketPurchase").value="";
   document.getElementById("marketPaid").value="";
   updateMarketPreview();
@@ -1144,20 +1816,64 @@ function updateMarketPreview(){
 }
 function addMarket(){
   const date=getSmartDateValue("marketDate");
-  const purchase=Number(document.getElementById("marketPurchase").value);
+  let purchase=Number(document.getElementById("marketPurchase").value);
   const paid=Number(document.getElementById("marketPaid").value);
+  const items = getMarketItems("marketItems");
+  const itemsSum = itemsTotal("marketItems");
+
   if(!date){ showToast("⚠️ তারিখ ঠিক করে দাও"); return; }
+
+  /* If items exist but purchase empty, use items sum */
+  if(items.length && (!Number.isFinite(purchase) || purchase<=0)){
+    purchase = itemsSum;
+  }
+
+  if(!Number.isFinite(purchase)||purchase<=0){ showToast("⚠️ বাজারের amount দে অথবা আইটেম যোগ কর"); return; }
+  if(!Number.isFinite(paid)||paid<0||paid>purchase){ showToast("⚠️ Paid amount ঠিক কর"); return; }
+
+  data.market.push({id:uid(),date,purchase,paid,items,createdAt:new Date().toISOString()});
+  commit(); entryDate=date;
+  closeModal("marketModal");
+  showToast("🛒 Market saved" + (items.length?` · ${items.length} item`:"" ));
+}
+function openMarketEditModal(id){
+  const m=data.market.find(x=>x.id===id);
+  if(!m) return;
+  editing.market=id;
+  setSmartDateValue("marketEditDate",m.date);
+  clearMarketItems("marketEditItems");
+  (m.items||[]).forEach(it=>addMarketItemRow("marketEditItems", it.name, it.price));
+  if(!m.items || !m.items.length){
+    document.getElementById("marketEditItemsTotal").textContent="৳0";
+  }
+  document.getElementById("marketEditPurchase").value=Number(m.purchase||0);
+  document.getElementById("marketEditPaid").value=Number(m.paid||0);
+  openModal("marketEditModal");
+}
+function saveMarketEdit(){
+  const m=data.market.find(x=>x.id===editing.market);
+  if(!m){ editing.market=null; return; }
+  const date=getSmartDateValue("marketEditDate");
+  let purchase=Number(document.getElementById("marketEditPurchase").value);
+  const paid=Number(document.getElementById("marketEditPaid").value);
+  const items=getMarketItems("marketEditItems");
+  const itemsSum=itemsTotal("marketEditItems");
+
+  if(!date){ showToast("⚠️ তারিখ দাও"); return; }
+  if(items.length && (!Number.isFinite(purchase) || purchase<=0)){
+    purchase = itemsSum;
+  }
   if(!Number.isFinite(purchase)||purchase<=0){ showToast("⚠️ বাজারের amount দে"); return; }
   if(!Number.isFinite(paid)||paid<0||paid>purchase){ showToast("⚠️ Paid amount ঠিক কর"); return; }
-  data.market.push({id:uid(),date,purchase,paid,createdAt:new Date().toISOString()});
-  saveData(); entryDate=date;
-  closeModal("marketModal"); renderAll();
-  showToast("🛒 Market saved");
+  m.date=date; m.purchase=purchase; m.paid=paid; m.items=items;
+  commit(); entryDate=date;
+  closeModal("marketEditModal"); editing.market=null;
+  showToast("✅ Market updated");
 }
 function deleteMarket(id){
   if(!confirm("এই market entry delete করবি?")) return;
   data.market=data.market.filter(m=>m.id!==id);
-  saveData(); renderAll();
+  commit();
   showToast("🗑️ Market deleted");
 }
 
@@ -1182,44 +1898,54 @@ function renderMemberDetail(id){
     <div class="stat glass"><div class="label">Refunded</div><div class="value orange-text">${money(refunded)}</div></div>
     <div class="stat glass"><div class="label">বাকি পাওনা</div><div class="value ${bal>=0?"cyan-text":"red-text"}">${money(Math.abs(bal))}</div></div>`;
 
-  /* Meal list */
   const mealList=mealsIn(id).slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
   document.getElementById("detailMeals").innerHTML=mealList.length?mealList.map(m=>{
     const val=mealValue(m);
-    const label = m.type==="Custom"
-      ? `📝 Custom`
-      : escapeHTML(m.type);
+    const label = m.type==="Custom" ? `📝 Custom` : escapeHTML(m.type);
     return `
     <div class="flow-row" style="margin-bottom:7px">
       <span>${formatDate(m.date)} · ${label}${m.charge>0?` <span class="purple-text small">(⚡ ${money(m.charge)})</span>`:""}</span>
-      <div><b>${val}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteMeal('${m.id}')">✕</button></div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <b>${val}</b>
+        <button class="btn icon-mini" onclick="openMealEditModal('${m.id}')">✎</button>
+        <button class="btn icon-mini" onclick="deleteMeal('${m.id}')">✕</button>
+      </div>
     </div>`;
   }).join(""):`<div class="empty">এই সময়কালে কোনো meal নেই</div>`;
 
-  /* Charge-only list */
   const chargeList=depositsIn(id).filter(d=>d.isChargeOnly||(Number(d.charge)>0 && Number(d.amount)===0))
     .slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
   document.getElementById("detailCharges").innerHTML=chargeList.length?chargeList.map(d=>`
     <div class="flow-row" style="margin-bottom:7px">
       <span>${formatDate(d.date)}${d.reason?` <span class="muted small">· ${escapeHTML(d.reason)}</span>`:""}</span>
-      <div><b class="purple-text">${money(d.charge)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteDeposit('${d.id}')">✕</button></div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <b class="purple-text">${money(d.charge)}</b>
+        <button class="btn icon-mini" onclick="openChargeEditModal('${d.id}')">✎</button>
+        <button class="btn icon-mini" onclick="deleteDeposit('${d.id}')">✕</button>
+      </div>
     </div>`).join(""):`<div class="empty">এই সময়কালে কোনো charge নেই</div>`;
 
-  /* Refund list */
   const refundList=refundsIn(id).slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
   document.getElementById("detailRefunds").innerHTML=refundList.length?refundList.map(r=>`
     <div class="flow-row" style="margin-bottom:7px">
       <span>${formatDate(r.date)}${r.note?` <span class="muted small">· ${escapeHTML(r.note)}</span>`:""}</span>
-      <div><b class="orange-text">${money(r.amount)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteRefund('${r.id}')">✕</button></div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <b class="orange-text">${money(r.amount)}</b>
+        <button class="btn icon-mini" onclick="openRefundEditModal('${r.id}')">✎</button>
+        <button class="btn icon-mini" onclick="deleteRefund('${r.id}')">✕</button>
+      </div>
     </div>`).join(""):`<div class="empty">এই সময়কালে কোনো refund নেই</div>`;
 
-  /* Deposit list */
   const deposits=depositsIn(id).filter(d=>Number(d.amount)>0)
     .slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.createdAt).localeCompare(String(b.createdAt)));
   document.getElementById("detailDeposits").innerHTML=deposits.length?deposits.map(d=>`
     <div class="flow-row" style="margin-bottom:7px">
       <span>${formatDate(d.date)}${d.charge>0?` <span class="purple-text small">(⚡ ${money(d.charge)})</span>`:""}</span>
-      <div><b class="green-text">${money(d.amount)}</b><button class="btn" style="padding:4px 8px;margin-left:5px" onclick="deleteDeposit('${d.id}')">✕</button></div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <b class="green-text">${money(d.amount)}</b>
+        <button class="btn icon-mini" onclick="openDepositEditModal('${d.id}')">✎</button>
+        <button class="btn icon-mini" onclick="deleteDeposit('${d.id}')">✕</button>
+      </div>
     </div>`).join(""):`<div class="empty">এই সময়কালে কোনো deposit নেই</div>`;
 }
 function copyMemberStatement(){
@@ -1262,7 +1988,6 @@ function renderHome(){
   document.getElementById("flowRefunds").textContent=money(totalRefunds());
   document.getElementById("flowBalance").textContent=money(totalDeposits()-totalPaidShop());
 
-  /* All-time overview */
   document.getElementById("ovCollected").textContent=money(allCollected());
   document.getElementById("ovMarket").textContent=money(allMarket());
   document.getElementById("ovPaidShop").textContent=money(allPaidShop());
@@ -1271,7 +1996,6 @@ function renderHome(){
   document.getElementById("ovCash").textContent=money(allCash());
   document.getElementById("ovShopDue").textContent=money(allShopDue());
 
-  /* Real-time cash position */
   document.getElementById("cashTotalIn").textContent=money(allCollected());
   document.getElementById("cashPaidShop").textContent=money(allPaidShop());
   document.getElementById("cashCharges").textContent=money(allCharges());
@@ -1293,9 +2017,7 @@ function renderDueList(){
   }
   if(get.length){
     html+=`<div class="small muted" style="margin:10px 0 6px">🟢 যাদের ফেরত দিতে হবে</div>`;
-    html+=get.map(r=>`<div class="flow-row">
-      <span>${escapeHTML(r.m.name)}${r.refunded>0?` <span class="small muted">(ফেরত দিয়েছ ${money(r.refunded)})</span>`:""}</span>
-      <b class="green-text">${money(r.bal)}</b></div>`).join("");
+    html+=get.map(r=>`<div class="flow-row"><span>${escapeHTML(r.m.name)}${r.refunded>0?` <span class="small muted">(ফেরত দিয়েছ ${money(r.refunded)})</span>`:""}</span><b class="green-text">${money(r.bal)}</b></div>`).join("");
   }
   if(!owe.length && !get.length) html=`<div class="empty">✅ সবাই সেটেলড</div>`;
   box.innerHTML=html;
@@ -1311,7 +2033,6 @@ function renderMembers(){
     box.innerHTML=`<div class="empty">এখনো কোনো member নেই<br><br><button class="btn primary" onclick="openMemberModal()">+ Add First Member</button></div>`;
     return;
   }
-
   const term=memberSearchTerm;
   const filtered=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
   document.getElementById("memberShownCount").textContent=filtered.length;
@@ -1329,8 +2050,8 @@ function renderMembers(){
     if(bal<-0.009){ status="দেবে"; cls="red-text"; }
     const initials=m.name.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase();
     const refundBtn = bal>0.009
-      ? `<button class="btn orange" style="padding:6px 4px;font-size:11px" onclick="openRefundModal('${m.id}')" title="Refund">💸</button>`
-      : `<button class="btn" style="padding:6px 4px;font-size:11px;opacity:.4" onclick="openRefundModal('${m.id}')" title="Refund">💸</button>`;
+      ? `<button class="btn orange" style="padding:6px 4px;font-size:11px" onclick="openRefundModal('${m.id}')">💸</button>`
+      : `<button class="btn" style="padding:6px 4px;font-size:11px;opacity:.4" onclick="openRefundModal('${m.id}')">💸</button>`;
     return `<div class="member">
       <div class="avatar" onclick="openMemberDetail('${m.id}')">${escapeHTML(initials)}</div>
       <div class="member-info" onclick="openMemberDetail('${m.id}')">
@@ -1343,7 +2064,7 @@ function renderMembers(){
       </div>
       <div class="member-actions">
         ${refundBtn}
-        <button class="btn purple" style="padding:6px 4px;font-size:11px" onclick="openChargeModal('${m.id}')" title="Charge">⚡</button>
+        <button class="btn purple" style="padding:6px 4px;font-size:11px" onclick="openChargeModal('${m.id}')">⚡</button>
         <button class="btn" style="padding:6px 4px;font-size:11px" onclick="editMember('${m.id}')">✎</button>
         <button class="btn" style="padding:6px 4px;font-size:11px" onclick="deleteMember('${m.id}')">🗑️</button>
       </div>
@@ -1353,21 +2074,31 @@ function renderMembers(){
 
 /* ============ RENDER: MARKET ============ */
 function renderMarket(){
-  const purchase=totalPurchase(), paid=totalPaidShop(), due=totalDueShop();
-  document.getElementById("mPurchase").textContent=money(purchase);
-  document.getElementById("mPaid").textContent=money(paid);
-  document.getElementById("mDue").textContent=money(due);
+  document.getElementById("mPurchase").textContent=money(totalPurchase());
+  document.getElementById("mPaid").textContent=money(totalPaidShop());
+  document.getElementById("mDue").textContent=money(totalDueShop());
   const list=marketIn().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
   document.getElementById("mCount").textContent=list.length;
   const box=document.getElementById("marketList");
   if(!list.length){ box.innerHTML=`<div class="empty">এই সময়কালে কোনো market entry নেই</div>`; return; }
   box.innerHTML=list.map(m=>{
     const entryDue=Math.max(0,Number(m.purchase||0)-Number(m.paid||0));
+    const itemsHTML = (m.items && m.items.length) ? `
+      <div class="market-items-chips">
+        ${m.items.map(it => `<span class="market-item-chip">
+          <span>${escapeHTML(it.name||"—")}</span>
+          <b>${money(it.price)}</b>
+        </span>`).join("")}
+      </div>` : "";
     return `<div class="market-row">
       <div class="market-top">
-        <div><b>🛒 ${formatDate(m.date)}</b><div class="small muted">Market Entry</div></div>
-        <button class="btn" style="padding:6px 9px" onclick="deleteMarket('${m.id}')">🗑️</button>
+        <div><b>🛒 ${formatDate(m.date)}</b><div class="small muted">${m.items && m.items.length ? `${m.items.length} item` : "Market Entry"}</div></div>
+        <div style="display:flex;gap:5px">
+          <button class="btn icon-mini" onclick="openMarketEditModal('${m.id}')">✎</button>
+          <button class="btn icon-mini" onclick="deleteMarket('${m.id}')">🗑️</button>
+        </div>
       </div>
+      ${itemsHTML}
       <div class="market-money">
         <div class="money-box"><small>বাজার</small><b class="orange-text">${money(m.purchase)}</b></div>
         <div class="money-box"><small>দেওয়া</small><b class="green-text">${money(m.paid)}</b></div>
@@ -1391,7 +2122,11 @@ function renderReport(){
   document.getElementById("rRefunds").textContent=money(totalRefunds());
   document.getElementById("rCash").textContent=money(totalDeposits()-totalPaidShop()-chargesIn()-totalRefunds());
 
-  /* Member Settlement (with search) */
+  /* Transaction summary — real-time */
+  document.getElementById("txDepositTotal").textContent=money(totalDeposits());
+  document.getElementById("txChargeTotal").textContent=money(chargesIn());
+  document.getElementById("txRefundTotal").textContent=money(totalRefunds());
+
   const memberReport=document.getElementById("memberReport");
   const term=reportSearchTerm;
   const filteredMembers=data.members.filter(m=>!term || normalizeText(m.name).includes(term));
@@ -1412,7 +2147,6 @@ function renderReport(){
     }).join("");
   }
 
-  /* Market Report */
   const marketReport=document.getElementById("marketReport");
   const markets=marketIn().slice().sort((a,b)=>a.date.localeCompare(b.date));
   marketReport.innerHTML=markets.map(m=>{
@@ -1420,7 +2154,6 @@ function renderReport(){
     return `<tr><td>${formatDate(m.date)}</td><td class="orange-text">${money(p)}</td><td class="green-text">${money(pd)}</td><td class="red-text">${money(d)}</td></tr>`;
   }).join("")||`<tr><td colspan="4">No market data</td></tr>`;
 
-  /* Transaction History (Deposit + Charge + Refund) */
   const txList=[];
   depositsIn().forEach(d=>{
     txList.push({date:d.date, createdAt:d.createdAt||"", memberId:d.memberId, kind:"deposit", amount:d.amount, charge:d.charge, note:d.reason, isChargeOnly:d.isChargeOnly});
@@ -1472,7 +2205,7 @@ function renderAll(){
 
 /* ============ BACKUP / RESTORE / CLEAR ============ */
 function backupPayload(){
-  return JSON.stringify({app:"Mess Manager Pro",version:12,exportedAt:new Date().toISOString(),range,data},null,2);
+  return JSON.stringify({app:"Mess Manager Pro",version:15,exportedAt:new Date().toISOString(),range,data},null,2);
 }
 function downloadBackup(){
   const blob=new Blob([backupPayload()],{type:"application/json"});
@@ -1490,14 +2223,15 @@ function restorePayload(text){
     const restored=parsed.data?normalizeData(parsed.data):normalizeData(parsed);
     if(!confirm("বর্তমান data replace হবে। Continue?")) return;
     data=restored;
-    saveData(); renderAll();
+    commit();
     showToast("✅ Backup restored");
   }catch(err){ console.error(err); showToast("❌ Invalid backup"); }
 }
 function clearAllData(){
-  if(!confirm("সব Member, Meal, Deposit, Charge, Refund এবং Market data permanently delete হবে। Continue?")) return;
-  data={version:12,members:[],meals:[],deposits:[],market:[],refunds:[]};
-  saveData(); activeMember=null; renderAll();
+  if(!confirm("সব data permanently delete হবে। Continue?")) return;
+  data={version:15,members:[],meals:[],deposits:[],market:[],refunds:[]};
+  activeMember=null;
+  commit();
   showToast("🗑️ সব data clear হয়েছে");
 }
 
@@ -1509,6 +2243,10 @@ bindSmartDate("chargeDate",iso=>{ entryDate=iso; });
 bindSmartDate("refundDate",iso=>{ entryDate=iso; });
 bindSmartDate("rngFrom",()=>{});
 bindSmartDate("rngTo",()=>{});
+bindSmartDate("depositEditDate",()=>{});
+bindSmartDate("chargeEditDate",()=>{});
+bindSmartDate("refundEditDate",()=>{});
+bindSmartDate("marketEditDate",()=>{});
 
 document.getElementById("marketPurchase").addEventListener("input",updateMarketPreview);
 document.getElementById("marketPaid").addEventListener("input",updateMarketPreview);
@@ -1522,11 +2260,64 @@ document.getElementById("restoreFile").addEventListener("change",function(){
   reader.readAsText(file);
 });
 
+/* Keyboard shortcuts */
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape") document.querySelectorAll(".modal.show").forEach(modal=>closeModal(modal.id));
+  if(e.key==="Escape"){
+    document.querySelectorAll(".modal.show").forEach(modal=>closeModal(modal.id));
+    return;
+  }
+  const tag=(e.target.tagName||"").toLowerCase();
+  const isInput=(tag==="input"||tag==="textarea"||tag==="select"||e.target.isContentEditable);
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){
+    if(isInput) return;
+    e.preventDefault();
+    if(e.shiftKey) redo(); else undo();
+  } else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="y"){
+    if(isInput) return;
+    e.preventDefault();
+    redo();
+  }
 });
 
-/* Midnight auto update */
+/* ============ LIQUID TAP ============ */
+const TAP_TARGETS=".btn, .quick, .nav button, .meal-btn, .dtbtn, .range-chip, .icon-btn, .search-clear, .close";
+let pressedEl=null;
+
+document.addEventListener("pointerdown",(e)=>{
+  const t=e.target.closest(TAP_TARGETS);
+  if(!t) return;
+  const r=t.getBoundingClientRect();
+  t.style.setProperty("--px",(e.clientX - r.left)+"px");
+  t.style.setProperty("--py",(e.clientY - r.top)+"px");
+  t.classList.add("pressed");
+  pressedEl=t;
+},{passive:true});
+
+function releasePress(){
+  if(pressedEl){ pressedEl.classList.remove("pressed"); pressedEl=null; }
+}
+document.addEventListener("pointerup",releasePress,{passive:true});
+document.addEventListener("pointercancel",releasePress,{passive:true});
+window.addEventListener("blur",releasePress);
+
+document.addEventListener("pointerdown",(e)=>{
+  const t=e.target.closest(".member");
+  if(!t) return;
+  t.classList.add("pressed");
+  const off=()=>{ t.classList.remove("pressed"); };
+  document.addEventListener("pointerup",off,{once:true});
+  document.addEventListener("pointercancel",off,{once:true});
+},{passive:true});
+
+/* iOS double-tap zoom prevention */
+let lastTouchEnd=0;
+document.addEventListener("touchend",(e)=>{
+  const now=Date.now();
+  if(now-lastTouchEnd<=300) e.preventDefault();
+  lastTouchEnd=now;
+},{passive:false});
+
+/* Midnight refresh */
 let lastDate=today();
 setInterval(()=>{
   const now=today();
@@ -1537,12 +2328,20 @@ setInterval(()=>{
     entryDate=now;
     renderAll();
   }
-},30000);
+},60000);
 
 /* ============ INIT ============ */
 loadData();
 entryDate=today();
+history=[snapshot()];
+historyIndex=0;
+applyPerfMode();
 renderAll();
+updateHistoryButtons();
+
+requestAnimationFrame(()=>{
+  setTimeout(startFpsProbe, 300);
+});
 </script>
 </body>
 </html>
